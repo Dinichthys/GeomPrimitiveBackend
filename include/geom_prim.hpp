@@ -1,6 +1,8 @@
 #ifndef GEOM_PRIM_HPP
 #define GEOM_PRIM_HPP
 
+#include <math.h>
+
 #include "hui/geomprim.hpp"
 
 #include "dr4/math/rect.hpp"
