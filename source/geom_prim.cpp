@@ -28,6 +28,17 @@ hui::EventResult Rectangle::OnMouseRelease(const hui::MouseUpEvent& evt) {
 
 hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
     rect_info_.size = evt.rel - rect_info_.pos;
+    if (rect_info_.size.x < 0) {
+        if (rect_info_.size.y < 0) {
+            rect_->SetPos(rect_info_.pos + rect_info_.size);
+        } else {
+            rect_->SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
+        }
+    } else {
+        if (rect_info_.size.y < 0) {
+            rect_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
+        }
+    }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     rect_->SetSize(rect_info_.size);
     return hui::EventResult::HANDLED;
