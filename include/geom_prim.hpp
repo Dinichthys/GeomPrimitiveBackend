@@ -83,8 +83,8 @@ class Circle : public hui::GeomPrim {
 class Arrow : public hui::GeomPrim {
     private:
         const dr4::Color kFillColor = {dr4::Color::ColorMaxValue, 0, 0};
-        const float kWidth = 5;
-        const float kArrowLenPercentage = 0.05;
+        const float kWidth = 3;
+        const float kArrowLen = 20;
 
         dr4::Line* line1_;
         dr4::Line* line2_;
@@ -125,15 +125,16 @@ class Arrow : public hui::GeomPrim {
         virtual void SetPos(dr4::Vec2f pos) override {
             line1_->SetStart(pos);
             dr4::Vec2f vec = end_ - start_;
+            float len = sqrt(vec.x * vec.x + vec.y * vec.y);
             end_ = vec + pos;
             start_ = pos;
             line1_->SetEnd(end_);
 
             line2_->SetStart(end_);
-            line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLenPercentage);
+            line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen / len);
 
             line3_->SetStart(end_);
-            line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLenPercentage);
+            line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen / len);
         };
 
         virtual dr4::Vec2f GetPos() const override {
