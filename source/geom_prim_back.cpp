@@ -7,6 +7,8 @@ hui::GeomPrim* GeomPrimBack::CreateGeomPrim(__attribute_maybe_unused__ size_t ge
             return new Rectangle(dr4Window->CreateRectangle());
         case 1:
             return new Circle(dr4Window->CreateCircle());
+        case 2:
+            return new Arrow(dr4Window->CreateLine(), dr4Window->CreateLine(), dr4Window->CreateLine());
         default:
             return NULL;
     }

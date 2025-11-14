@@ -2,6 +2,8 @@
 
 #include <math.h>
 
+//----------RECTANGLE-----------------------------------------------------------------------------------------
+
 hui::EventResult Rectangle::OnMouseDown(const hui::MouseDownEvent& evt) {
     rect_info_.pos = evt.relPos;
     rect_->SetPos(rect_info_.pos);
@@ -44,6 +46,8 @@ hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
     return hui::EventResult::HANDLED;
 }
 
+//----------CIRCLE--------------------------------------------------------------------------------------------
+
 hui::EventResult Circle::OnMouseDown(const hui::MouseDownEvent& evt) {
     center_ = evt.relPos;
     circle_->SetCenter(evt.relPos);
@@ -61,5 +65,39 @@ hui::EventResult Circle::OnMouseMove(const hui::MouseMoveEvent& evt) {
     dr4::Vec2f vec = evt.rel - center_;
     float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     circle_->SetRadius(radius);
+    return hui::EventResult::HANDLED;
+}
+
+//----------ARROW---------------------------------------------------------------------------------------------
+
+hui::EventResult Arrow::OnMouseDown(const hui::MouseDownEvent& evt) {
+    start_ = evt.relPos;
+    line1_->SetStart(evt.relPos);
+    return hui::EventResult::HANDLED;
+}
+
+hui::EventResult Arrow::OnMouseRelease(const hui::MouseUpEvent& evt) {
+    end_ = evt.relPos;
+    dr4::Vec2f vec = end_ - start_;
+    line1_->SetEnd(end_);
+
+    line2_->SetStart(end_);
+    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLenPercentage);
+
+    line3_->SetStart(end_);
+    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLenPercentage);
+    return hui::EventResult::HANDLED;
+}
+
+hui::EventResult Arrow::OnMouseMove(const hui::MouseMoveEvent& evt) {
+    end_ = evt.rel;
+    dr4::Vec2f vec = end_ - start_;
+    line1_->SetEnd(end_);
+
+    line2_->SetStart(end_);
+    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLenPercentage);
+
+    line3_->SetStart(end_);
+    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLenPercentage);
     return hui::EventResult::HANDLED;
 }
