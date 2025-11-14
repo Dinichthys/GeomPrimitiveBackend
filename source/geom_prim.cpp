@@ -79,25 +79,27 @@ hui::EventResult Arrow::OnMouseDown(const hui::MouseDownEvent& evt) {
 hui::EventResult Arrow::OnMouseRelease(const hui::MouseUpEvent& evt) {
     end_ = evt.relPos;
     dr4::Vec2f vec = end_ - start_;
+    float len = sqrt(vec.x * vec.x + vec.y * vec.y);
     line1_->SetEnd(end_);
 
     line2_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen);
+    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen / len);
 
     line3_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen);
+    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen / len);
     return hui::EventResult::HANDLED;
 }
 
 hui::EventResult Arrow::OnMouseMove(const hui::MouseMoveEvent& evt) {
     end_ = evt.rel;
     dr4::Vec2f vec = end_ - start_;
+    float len = sqrt(vec.x * vec.x + vec.y * vec.y);
     line1_->SetEnd(end_);
 
     line2_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen);
+    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen / len);
 
     line3_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen);
+    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen / len);
     return hui::EventResult::HANDLED;
 }
