@@ -21,3 +21,23 @@ hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
     rect_->SetSize(rect_info_.size);
     return hui::EventResult::HANDLED;
 }
+
+hui::EventResult Circle::OnMouseDown(const hui::MouseDownEvent& evt) {
+    center_ = evt.relPos;
+    circle_->SetPos(evt.relPos);
+    return hui::EventResult::HANDLED;
+}
+
+hui::EventResult Circle::OnMouseRelease(const hui::MouseUpEvent& evt) {
+    dr4::Vec2f vec = evt.relPos - center_;
+    float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
+    circle_->SetRadius(radius);
+    return hui::EventResult::HANDLED;
+}
+
+hui::EventResult Circle::OnMouseMove(const hui::MouseMoveEvent& evt) {
+    dr4::Vec2f vec = evt.rel - center_;
+    float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
+    circle_->SetRadius(radius);
+    return hui::EventResult::HANDLED;
+}
