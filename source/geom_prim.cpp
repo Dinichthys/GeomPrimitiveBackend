@@ -16,7 +16,7 @@ hui::EventResult Rectangle::OnMouseRelease(const hui::MouseUpEvent& evt) {
 }
 
 hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
-    rect_info_.size += evt.rel;
+    rect_info_.size = evt.rel - rect_info_.pos;
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     rect_->SetSize(rect_info_.size);
     return hui::EventResult::HANDLED;

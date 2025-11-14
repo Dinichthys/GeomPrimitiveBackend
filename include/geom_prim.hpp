@@ -8,7 +8,7 @@
 class Rectangle : public hui::GeomPrim {
     private:
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
-        const float kBorderThickness = 20;
+        const float kBorderThickness = 5;
         dr4::Rectangle* rect_;
         dr4::Rect2f rect_info_;
 
