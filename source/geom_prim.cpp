@@ -24,7 +24,7 @@ hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
 
 hui::EventResult Circle::OnMouseDown(const hui::MouseDownEvent& evt) {
     center_ = evt.relPos;
-    circle_->SetPos(evt.relPos);
+    circle_->SetCenter(evt.relPos);
     return hui::EventResult::HANDLED;
 }
 
