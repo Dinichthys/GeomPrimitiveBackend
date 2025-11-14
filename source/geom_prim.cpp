@@ -4,14 +4,14 @@
 
 //----------RECTANGLE-----------------------------------------------------------------------------------------
 
-hui::EventResult Rectangle::OnMouseDown(const hui::MouseDownEvent& evt) {
-    rect_info_.pos = evt.relPos;
+bool Rectangle::OnMouseDown(const dr4::Event& evt) {
+    rect_info_.pos = evt.mouseButton.pos;
     rect_->SetPos(rect_info_.pos);
-    return hui::EventResult::HANDLED;
+    return true;
 }
 
-hui::EventResult Rectangle::OnMouseRelease(const hui::MouseUpEvent& evt) {
-    rect_info_.size = evt.relPos - rect_info_.pos;
+bool Rectangle::OnMouseRelease(const dr4::Event& evt) {
+    rect_info_.size = evt.mouseButton.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
             rect_->SetPos(rect_info_.pos + rect_info_.size);
@@ -25,11 +25,11 @@ hui::EventResult Rectangle::OnMouseRelease(const hui::MouseUpEvent& evt) {
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     rect_->SetSize(rect_info_.size);
-    return hui::EventResult::HANDLED;
+    return true;
 }
 
-hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
-    rect_info_.size = evt.rel - rect_info_.pos;
+bool Rectangle::OnMouseMove(const dr4::Event& evt) {
+    rect_info_.size = evt.mouseMove.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
             rect_->SetPos(rect_info_.pos + rect_info_.size);
@@ -43,41 +43,41 @@ hui::EventResult Rectangle::OnMouseMove(const hui::MouseMoveEvent& evt) {
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     rect_->SetSize(rect_info_.size);
-    return hui::EventResult::HANDLED;
+    return true;
 }
 
 //----------CIRCLE--------------------------------------------------------------------------------------------
 
-hui::EventResult Circle::OnMouseDown(const hui::MouseDownEvent& evt) {
-    center_ = evt.relPos;
-    circle_->SetCenter(evt.relPos);
-    return hui::EventResult::HANDLED;
+bool Circle::OnMouseDown(const dr4::Event& evt) {
+    center_ = evt.mouseButton.pos;
+    circle_->SetCenter(evt.mouseButton.pos);
+    return true;
 }
 
-hui::EventResult Circle::OnMouseRelease(const hui::MouseUpEvent& evt) {
-    dr4::Vec2f vec = evt.relPos - center_;
+bool Circle::OnMouseRelease(const dr4::Event& evt) {
+    dr4::Vec2f vec = evt.mouseButton.pos - center_;
     float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     circle_->SetRadius(radius);
-    return hui::EventResult::HANDLED;
+    return true;
 }
 
-hui::EventResult Circle::OnMouseMove(const hui::MouseMoveEvent& evt) {
-    dr4::Vec2f vec = evt.rel - center_;
+bool Circle::OnMouseMove(const dr4::Event& evt) {
+    dr4::Vec2f vec = evt.mouseMove.pos - center_;
     float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     circle_->SetRadius(radius);
-    return hui::EventResult::HANDLED;
+    return true;
 }
 
 //----------ARROW---------------------------------------------------------------------------------------------
 
-hui::EventResult Arrow::OnMouseDown(const hui::MouseDownEvent& evt) {
-    start_ = evt.relPos;
-    line1_->SetStart(evt.relPos);
-    return hui::EventResult::HANDLED;
+bool Arrow::OnMouseDown(const dr4::Event& evt) {
+    start_ = evt.mouseButton.pos;
+    line1_->SetStart(evt.mouseButton.pos);
+    return true;
 }
 
-hui::EventResult Arrow::OnMouseRelease(const hui::MouseUpEvent& evt) {
-    end_ = evt.relPos;
+bool Arrow::OnMouseRelease(const dr4::Event& evt) {
+    end_ = evt.mouseButton.pos;
     dr4::Vec2f vec = end_ - start_;
     dr4::Vec2f ortho(-(vec.y), vec.x);
     float len = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -88,11 +88,11 @@ hui::EventResult Arrow::OnMouseRelease(const hui::MouseUpEvent& evt) {
 
     line3_->SetStart(end_ + ortho * kWidth / len);
     line3_->SetEnd(end_ - (vec - ortho) * kArrowLen / len);
-    return hui::EventResult::HANDLED;
+    return true;
 }
 
-hui::EventResult Arrow::OnMouseMove(const hui::MouseMoveEvent& evt) {
-    end_ = evt.rel;
+bool Arrow::OnMouseMove(const dr4::Event& evt) {
+    end_ = evt.mouseMove.pos;
     dr4::Vec2f vec = end_ - start_;
     dr4::Vec2f ortho(-(vec.y), vec.x);
     float len = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -103,5 +103,5 @@ hui::EventResult Arrow::OnMouseMove(const hui::MouseMoveEvent& evt) {
 
     line3_->SetStart(end_ + ortho * kWidth / len);
     line3_->SetEnd(end_ - (vec - ortho) * kArrowLen / len);
-    return hui::EventResult::HANDLED;
+    return true;
 }

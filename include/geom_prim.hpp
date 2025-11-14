@@ -27,9 +27,9 @@ class Rectangle : public hui::GeomPrim {
             delete rect_;
         };
 
-        virtual hui::EventResult OnMouseMove(const hui::MouseMoveEvent& evt)  override;
-        virtual hui::EventResult OnMouseDown(const hui::MouseDownEvent& evt)  override;
-        virtual hui::EventResult OnMouseRelease(const hui::MouseUpEvent& evt) override;
+        virtual bool OnMouseMove(const dr4::Event& evt)    override;
+        virtual bool OnMouseDown(const dr4::Event& evt)    override;
+        virtual bool OnMouseRelease(const dr4::Event& evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             rect_->DrawOn(texture);
@@ -65,9 +65,9 @@ class Circle : public hui::GeomPrim {
             delete circle_;
         };
 
-        virtual hui::EventResult OnMouseMove(const hui::MouseMoveEvent& evt)  override;
-        virtual hui::EventResult OnMouseDown(const hui::MouseDownEvent& evt)  override;
-        virtual hui::EventResult OnMouseRelease(const hui::MouseUpEvent& evt) override;
+        virtual bool OnMouseMove(const dr4::Event& evt)    override;
+        virtual bool OnMouseDown(const dr4::Event& evt)    override;
+        virtual bool OnMouseRelease(const dr4::Event& evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             circle_->DrawOn(texture);
@@ -115,9 +115,9 @@ class Arrow : public hui::GeomPrim {
             delete line3_;
         }
 
-        virtual hui::EventResult OnMouseMove(const hui::MouseMoveEvent& evt)  override;
-        virtual hui::EventResult OnMouseDown(const hui::MouseDownEvent& evt)  override;
-        virtual hui::EventResult OnMouseRelease(const hui::MouseUpEvent& evt) override;
+        virtual bool OnMouseMove(const dr4::Event& evt)    override;
+        virtual bool OnMouseDown(const dr4::Event& evt)    override;
+        virtual bool OnMouseRelease(const dr4::Event& evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             line1_->DrawOn(texture);
