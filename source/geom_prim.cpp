@@ -82,10 +82,10 @@ hui::EventResult Arrow::OnMouseRelease(const hui::MouseUpEvent& evt) {
     line1_->SetEnd(end_);
 
     line2_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLenPercentage);
+    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen);
 
     line3_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLenPercentage);
+    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen);
     return hui::EventResult::HANDLED;
 }
 
@@ -95,9 +95,9 @@ hui::EventResult Arrow::OnMouseMove(const hui::MouseMoveEvent& evt) {
     line1_->SetEnd(end_);
 
     line2_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLenPercentage);
+    line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen);
 
     line3_->SetStart(end_);
-    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLenPercentage);
+    line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen);
     return hui::EventResult::HANDLED;
 }
