@@ -83,10 +83,10 @@ hui::EventResult Arrow::OnMouseRelease(const hui::MouseUpEvent& evt) {
     float len = sqrt(vec.x * vec.x + vec.y * vec.y);
     line1_->SetEnd(end_);
 
-    line2_->SetStart(end_);
+    line2_->SetStart(end_ + (ortho - vec) * kWidthDivSqrt2 / len);
     line2_->SetEnd(end_ - (vec + ortho) * kArrowLen / len);
 
-    line3_->SetStart(end_);
+    line3_->SetStart(end_ + ortho * kWidth / len);
     line3_->SetEnd(end_ - (vec - ortho) * kArrowLen / len);
     return hui::EventResult::HANDLED;
 }
@@ -98,7 +98,7 @@ hui::EventResult Arrow::OnMouseMove(const hui::MouseMoveEvent& evt) {
     float len = sqrt(vec.x * vec.x + vec.y * vec.y);
     line1_->SetEnd(end_);
 
-    line2_->SetStart(end_);
+    line2_->SetStart(end_ + (ortho - vec) * kWidthDivSqrt2 / len);
     line2_->SetEnd(end_ - (vec + ortho) * kArrowLen / len);
 
     line3_->SetStart(end_ + ortho * kWidth / len);

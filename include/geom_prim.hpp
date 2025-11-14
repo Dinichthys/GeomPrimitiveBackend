@@ -87,6 +87,7 @@ class Arrow : public hui::GeomPrim {
         const dr4::Color kFillColor = {dr4::Color::ColorMaxValue, 0, 0};
         const float kWidth = 3;
         const float kArrowLen = 20;
+        const float kWidthDivSqrt2 = kWidth / sqrt(2);
 
         dr4::Line* line1_;
         dr4::Line* line2_;
