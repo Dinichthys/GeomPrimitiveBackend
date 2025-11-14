@@ -134,7 +134,7 @@ class Arrow : public hui::GeomPrim {
             line2_->SetEnd(end_ + dr4::Vec2f(-(vec.y), vec.x) * kArrowLen / len);
 
             line3_->SetStart(end_);
-            line2_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen / len);
+            line3_->SetEnd(end_ + dr4::Vec2f(vec.y, -(vec.x)) * kArrowLen / len);
         };
 
         virtual dr4::Vec2f GetPos() const override {
