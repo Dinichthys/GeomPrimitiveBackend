@@ -1,0 +1,143 @@
+#ifndef GEOM_PRIM_TOOLS_HPP
+#define GEOM_PRIM_TOOLS_HPP
+
+#include "pp/tool.hpp"
+#include "pp/canvas.hpp"
+
+#include "geom_prim.hpp"
+
+class RectangleTool : public pp::Tool {
+    private:
+        pp::Canvas* cvs_;
+
+        bool is_drawing_;
+
+        Rectangle* rect_;
+
+        size_t shape_idx;
+
+        const std::string kIcon = "󰗆";
+        const std::string kName = "RectangleTool";
+
+    public:
+        RectangleTool(pp::Canvas* cvs)
+            :cvs_(cvs), is_drawing_(false), rect_(NULL) {};
+
+        virtual std::string_view Icon() const override {return kIcon;};
+        virtual std::string_view Name() const override {return kName;};
+        virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
+
+        virtual void OnStart() override {
+            is_drawing_ = true;
+            rect_ = new Rectangle(cvs_->GetWindow()->CreateRectangle());
+            rect_->SetTheme(cvs_->GetControlsTheme());
+            shape_idx = cvs_->AddShape(rect_);
+        };
+        virtual void OnBreak() override {
+            if (!is_drawing_) {
+                return;
+            }
+            cvs_->DelShape(shape_idx);
+            OnEnd();
+        };
+        virtual void OnEnd() override {
+            rect_ = NULL;
+            is_drawing_ = false;
+        };
+
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+};
+
+class CircleTool : public pp::Tool {
+    private:
+        pp::Canvas* cvs_;
+
+        bool is_drawing_;
+
+        Circle* circle_;
+
+        size_t shape_idx;
+
+        const std::string kIcon = "";
+        const std::string kName = "CircleTool";
+
+    public:
+        CircleTool(pp::Canvas* cvs)
+            :cvs_(cvs), is_drawing_(false), circle_(NULL) {};
+
+        virtual std::string_view Icon() const override {return kIcon;};
+        virtual std::string_view Name() const override {return kName;};
+        virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
+
+        virtual void OnStart() override {
+            is_drawing_ = true;
+            circle_ = new Circle(cvs_->GetWindow()->CreateCircle());
+            circle_->SetTheme(cvs_->GetControlsTheme());
+            shape_idx = cvs_->AddShape(circle_);
+        };
+        virtual void OnBreak() override {
+            if (!is_drawing_) {
+                return;
+            }
+            cvs_->DelShape(shape_idx);
+            OnEnd();
+        };
+        virtual void OnEnd() override {
+            circle_ = NULL;
+            is_drawing_ = false;
+        };
+
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+};
+
+class ArrowTool : public pp::Tool {
+    private:
+        pp::Canvas* cvs_;
+
+        bool is_drawing_;
+
+        Arrow* arrow_;
+
+        size_t shape_idx;
+
+        const std::string kIcon = "󰁜";
+        const std::string kName = "ArrowTool";
+
+    public:
+        ArrowTool(pp::Canvas* cvs)
+            :cvs_(cvs), is_drawing_(false), arrow_(NULL) {};
+
+        virtual std::string_view Icon() const override {return kIcon;};
+        virtual std::string_view Name() const override {return kName;};
+        virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
+
+        virtual void OnStart() override {
+            is_drawing_ = true;
+            arrow_ = new Arrow(cvs_->GetWindow()->CreateLine(),
+                               cvs_->GetWindow()->CreateLine(),
+                               cvs_->GetWindow()->CreateLine());
+            arrow_->SetTheme(cvs_->GetControlsTheme());
+            shape_idx = cvs_->AddShape(arrow_);
+        };
+        virtual void OnBreak() override {
+            if (!is_drawing_) {
+                return;
+            }
+            cvs_->DelShape(shape_idx);
+            OnEnd();
+        };
+        virtual void OnEnd() override {
+            arrow_ = NULL;
+            is_drawing_ = false;
+        };
+
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+};
+
+#endif // GEOM_PRIM_TOOLS_HPP

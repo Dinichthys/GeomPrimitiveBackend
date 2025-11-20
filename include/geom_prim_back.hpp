@@ -1,22 +1,22 @@
 #ifndef GEOM_PRIM_BACK_HPP
 #define GEOM_PRIM_BACK_HPP
 
-#include "cum/geomprim_ifc.hpp"
+#include "cum/ifc/pp.hpp"
 #include "cum/plugin.hpp"
-#include "cum/version.hpp"
 
-class GeomPrimBack : public hui::GeomPrimBackend {
+class GeomPrimBack : public cum::PPToolPlugin {
     public:
-        virtual hui::GeomPrim* CreateGeomPrim(size_t geomPrimType, dr4::Window* dr4Window) override;
+        virtual std::vector<std::unique_ptr<::pp::Tool>> CreateTools(pp::Canvas *cvs) override;
 
-        virtual const std::string &GetName() const override {return kName;};
-        virtual const std::string &GetDescription() const override {return kDescription;};
-        virtual const cum::PluginVersion &GetVersion() const override {return kVersion;};
+        virtual std::string_view GetIdentifier() const override {return kName;};
+        virtual std::string_view GetName() const override {return kName;};
+        virtual std::string_view GetDescription() const override {return kDescription;};
 
-        virtual std::vector<std::string> GetDependencies() const override {return {};};
-        virtual bool IsCompatibleWith(__attribute_maybe_unused__ const Plugin& other) const override {return true;};
+        virtual std::vector<std::string_view> GetDependencies() const override {return {};};
+        virtual std::vector<std::string_view> GetConflicts() const override {return {};};
 
-        const cum::PluginVersion kVersion = {1, 4, 88};
+        virtual void AfterLoad() override {};
+
         const std::string kName = "DenGeomPrimBackend";
         const std::string kDescription =
             "This plugin provides opportunity for creating and drawing geometric primitives\n";

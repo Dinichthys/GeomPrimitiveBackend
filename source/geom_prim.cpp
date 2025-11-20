@@ -4,14 +4,27 @@
 
 //----------RECTANGLE-----------------------------------------------------------------------------------------
 
-bool Rectangle::OnMouseDown(const dr4::Event& evt) {
-    rect_info_.pos = evt.mouseButton.pos;
-    rect_->SetPos(rect_info_.pos);
-    return true;
+bool Rectangle::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if (selected_) {
+        rect_info_.pos = evt.pos;
+        rect_->SetPos(rect_info_.pos);
+        return true;
+    }
+
+    if (rect_info_.Contains(evt.pos)) {
+        selected_ = true;
+        return true;
+    }
+
+    return false;
 }
 
-bool Rectangle::OnMouseRelease(const dr4::Event& evt) {
-    rect_info_.size = evt.mouseButton.pos - rect_info_.pos;
+bool Rectangle::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
             rect_->SetPos(rect_info_.pos + rect_info_.size);
@@ -28,8 +41,12 @@ bool Rectangle::OnMouseRelease(const dr4::Event& evt) {
     return true;
 }
 
-bool Rectangle::OnMouseMove(const dr4::Event& evt) {
-    rect_info_.size = evt.mouseMove.pos - rect_info_.pos;
+bool Rectangle::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
             rect_->SetPos(rect_info_.pos + rect_info_.size);
@@ -48,21 +65,41 @@ bool Rectangle::OnMouseMove(const dr4::Event& evt) {
 
 //----------CIRCLE--------------------------------------------------------------------------------------------
 
-bool Circle::OnMouseDown(const dr4::Event& evt) {
-    center_ = evt.mouseButton.pos;
-    circle_->SetCenter(evt.mouseButton.pos);
-    return true;
+bool Circle::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if (selected_) {
+        center_ = evt.pos;
+        circle_->SetCenter(evt.pos);
+        return true;
+    }
+
+    float radius_circle = sqrt(center_.x * center_.x + center_.y * center_.y);
+    float cur_radius = sqrt(evt.pos.x * evt.pos.x + evt.pos.y * evt.pos.y);
+    if ((cur_radius > radius_circle - kBorderThickness)
+        && (cur_radius < radius_circle + kBorderThickness)) {
+        selected_ = true;
+        return true;
+    }
+
+    return false;
 }
 
-bool Circle::OnMouseRelease(const dr4::Event& evt) {
-    dr4::Vec2f vec = evt.mouseButton.pos - center_;
+bool Circle::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    dr4::Vec2f vec = evt.pos - center_;
     float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     circle_->SetRadius(radius);
     return true;
 }
 
-bool Circle::OnMouseMove(const dr4::Event& evt) {
-    dr4::Vec2f vec = evt.mouseMove.pos - center_;
+bool Circle::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    dr4::Vec2f vec = evt.pos - center_;
     float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     circle_->SetRadius(radius);
     return true;
@@ -70,14 +107,29 @@ bool Circle::OnMouseMove(const dr4::Event& evt) {
 
 //----------ARROW---------------------------------------------------------------------------------------------
 
-bool Arrow::OnMouseDown(const dr4::Event& evt) {
-    start_ = evt.mouseButton.pos;
-    line1_->SetStart(evt.mouseButton.pos);
-    return true;
+bool Arrow::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if (!selected_) {
+        start_ = evt.pos;
+        line1_->SetStart(evt.pos);
+        return true;
+    }
+
+    if (IsLineContainPos(line1_, evt.pos)
+        || IsLineContainPos(line2_, evt.pos)
+        || IsLineContainPos(line3_, evt.pos)) {
+        selected_ = true;
+        return true;
+    }
+
+    return false;
 }
 
-bool Arrow::OnMouseRelease(const dr4::Event& evt) {
-    end_ = evt.mouseButton.pos;
+bool Arrow::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    end_ = evt.pos;
     dr4::Vec2f vec = end_ - start_;
     dr4::Vec2f ortho(-(vec.y), vec.x);
     float len = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -91,8 +143,12 @@ bool Arrow::OnMouseRelease(const dr4::Event& evt) {
     return true;
 }
 
-bool Arrow::OnMouseMove(const dr4::Event& evt) {
-    end_ = evt.mouseMove.pos;
+bool Arrow::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    end_ = evt.pos;
     dr4::Vec2f vec = end_ - start_;
     dr4::Vec2f ortho(-(vec.y), vec.x);
     float len = sqrt(vec.x * vec.x + vec.y * vec.y);

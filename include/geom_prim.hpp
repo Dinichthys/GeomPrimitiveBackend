@@ -3,12 +3,17 @@
 
 #include <math.h>
 
-#include "hui/geomprim.hpp"
+#include "pp/shape.hpp"
+#include "pp/canvas.hpp"
 
 #include "dr4/math/rect.hpp"
 
-class Rectangle : public hui::GeomPrim {
+static const float kEpsilon = 0.01;
+
+class Rectangle : public pp::Shape {
     private:
+        bool selected_;
+
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
         const float kBorderThickness = 5;
 
@@ -21,15 +26,16 @@ class Rectangle : public hui::GeomPrim {
             rect_->SetBorderColor(kBorderColor);
             rect_->SetBorderThickness(kBorderThickness);
             rect_->SetFillColor({0, 0, 0, 0});
+            selected_ = false;
         };
 
         ~Rectangle() {
             delete rect_;
         };
 
-        virtual bool OnMouseMove(const dr4::Event& evt)    override;
-        virtual bool OnMouseDown(const dr4::Event& evt)    override;
-        virtual bool OnMouseRelease(const dr4::Event& evt) override;
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             rect_->DrawOn(texture);
@@ -43,10 +49,20 @@ class Rectangle : public hui::GeomPrim {
         virtual dr4::Vec2f GetPos() const override {
             return rect_info_.pos;
         };
+
+        virtual void OnSelect() override {selected_ = true;};
+        virtual void OnDeselect() override {selected_ = false;};
+
+        void SetTheme(const pp::ControlsTheme& theme) {
+            rect_->SetFillColor(theme.shapeColor);
+            rect_->SetBorderColor(theme.lineColor);
+        };
 };
 
-class Circle : public hui::GeomPrim {
+class Circle : public pp::Shape {
     private:
+        bool selected_;
+
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
         const float kBorderThickness = 5;
 
@@ -59,15 +75,16 @@ class Circle : public hui::GeomPrim {
             circle_->SetBorderColor(kBorderColor);
             circle_->SetBorderThickness(kBorderThickness);
             circle_->SetFillColor({0, 0, 0, 0});
+            selected_ = false;
         };
 
         ~Circle() {
             delete circle_;
         };
 
-        virtual bool OnMouseMove(const dr4::Event& evt)    override;
-        virtual bool OnMouseDown(const dr4::Event& evt)    override;
-        virtual bool OnMouseRelease(const dr4::Event& evt) override;
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             circle_->DrawOn(texture);
@@ -80,10 +97,20 @@ class Circle : public hui::GeomPrim {
         virtual dr4::Vec2f GetPos() const override {
             return circle_->GetPos();
         };
+
+        virtual void OnSelect() override {selected_ = true;};
+        virtual void OnDeselect() override {selected_ = false;};
+
+        void SetTheme(const pp::ControlsTheme& theme) {
+            circle_->SetFillColor(theme.shapeColor);
+            circle_->SetBorderColor(theme.lineColor);
+        };
 };
 
-class Arrow : public hui::GeomPrim {
+class Arrow : public pp::Shape {
     private:
+        bool selected_;
+
         const dr4::Color kFillColor = {dr4::Color::ColorMaxValue, 0, 0};
         const float kWidth = 3;
         const float kArrowLen = 20;
@@ -107,6 +134,7 @@ class Arrow : public hui::GeomPrim {
             line2_->SetThickness(kWidth);
             line3_->SetColor(kFillColor);
             line3_->SetThickness(kWidth);
+            selected_ = false;
         };
 
         ~Arrow() {
@@ -115,9 +143,9 @@ class Arrow : public hui::GeomPrim {
             delete line3_;
         }
 
-        virtual bool OnMouseMove(const dr4::Event& evt)    override;
-        virtual bool OnMouseDown(const dr4::Event& evt)    override;
-        virtual bool OnMouseRelease(const dr4::Event& evt) override;
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             line1_->DrawOn(texture);
@@ -144,6 +172,33 @@ class Arrow : public hui::GeomPrim {
             return start_;
         };
 
+        virtual void OnSelect() override {selected_ = true;};
+        virtual void OnDeselect() override {selected_ = false;};
+
+        void SetTheme(const pp::ControlsTheme& theme) {
+            line1_->SetColor(theme.lineColor);
+            line2_->SetColor(theme.lineColor);
+            line3_->SetColor(theme.lineColor);
+        };
+
+    private:
+        bool IsLineContainPos(const dr4::Line* line, dr4::Vec2f pos) {
+            dr4::Vec2f vec_line = line->GetEnd() - line->GetStart();
+            float len_line = sqrt(vec_line.x * vec_line.x + vec_line.y * vec_line.y);
+            float sin_line = vec_line.y / len_line;
+            float cos_line = vec_line.x / len_line;
+
+            dr4::Vec2f vec = pos - line->GetStart();
+            float len = sqrt(vec.x * vec.x + vec.y * vec.y);
+            float sin = vec.y / len;
+            float cos = vec.x / len;
+
+            return (len < len_line)
+                    && (sin > sin_line - kEpsilon)
+                    && (sin < sin_line + kEpsilon)
+                    && (cos > cos_line - kEpsilon)
+                    && (cos < cos_line + kEpsilon);
+        };
 };
 
 #endif // GEOM_PRIM_HPP

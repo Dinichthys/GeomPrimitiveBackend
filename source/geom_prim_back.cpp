@@ -1,19 +1,18 @@
 #include "geom_prim_back.hpp"
-#include "geom_prim.hpp"
+#include "geom_prim_tools.hpp"
 
-hui::GeomPrim* GeomPrimBack::CreateGeomPrim(__attribute_maybe_unused__ size_t geomPrimType, dr4::Window* dr4Window) {
-    switch(geomPrimType) {
-        case 0:
-            return new Rectangle(dr4Window->CreateRectangle());
-        case 1:
-            return new Circle(dr4Window->CreateCircle());
-        case 2:
-            return new Arrow(dr4Window->CreateLine(), dr4Window->CreateLine(), dr4Window->CreateLine());
-        default:
-            return NULL;
-    }
+#include "cum/manager.hpp"
+
+std::vector<std::unique_ptr<::pp::Tool>> GeomPrimBack::CreateTools(pp::Canvas *cvs) {
+    std::vector<std::unique_ptr<::pp::Tool>> res;
+
+    res.push_back(std::unique_ptr<::pp::Tool>(new RectangleTool(cvs)));
+    res.push_back(std::unique_ptr<::pp::Tool>(new CircleTool(cvs)));
+    res.push_back(std::unique_ptr<::pp::Tool>(new ArrowTool(cvs)));
+
+    return res;
 }
 
-extern "C" hui::GeomPrimBackend* GEOM_PRIM_BACKEND_FUNCTION () {
+extern "C" cum::Plugin* CREATE_PLUGIN_FUNC_NAME() {
     return new GeomPrimBack();
 }
