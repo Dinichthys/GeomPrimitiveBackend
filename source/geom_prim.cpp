@@ -13,7 +13,13 @@ bool Rectangle::OnMouseDown(const dr4::Event::MouseButton &evt) {
         return true;
     }
 
-    if (rect_info_.Contains(evt.pos)) {
+    dr4::Rect2f external_rect = rect_info_;
+    external_rect.size = {external_rect.size.x + kBorderThickness, external_rect.size.y + kBorderThickness};
+
+    dr4::Rect2f internal_rect = rect_info_;
+    internal_rect.size = {internal_rect.size.x - kBorderThickness, internal_rect.size.y - kBorderThickness};
+
+    if ((external_rect.Contains(evt.pos)) && (!internal_rect.Contains(evt.pos))) {
         cvs_->GetState()->selectedShape = this;
         selected_ = true;
         return true;
