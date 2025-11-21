@@ -1,5 +1,7 @@
 #include "geom_prim_tools.hpp"
 
+namespace pp {
+
 //----------RECTANGLE-----------------------------------------------------------------------------------------
 
 bool RectangleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
@@ -11,6 +13,7 @@ bool RectangleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
 
     is_drawing_ = true;
     rect_->SetPos(evt.pos);
+    rect_->OnSelect();
     return true;
 }
 
@@ -20,6 +23,7 @@ bool RectangleTool::OnMouseUp(const dr4::Event::MouseButton &evt) {
     }
 
     rect_->OnMouseUp(evt);
+    rect_->OnDeselect();
     OnEnd();
     return true;
 }
@@ -44,6 +48,7 @@ bool CircleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
 
     is_drawing_ = true;
     circle_->SetPos(evt.pos);
+    circle_->OnSelect();
     return true;
 }
 
@@ -53,6 +58,7 @@ bool CircleTool::OnMouseUp(const dr4::Event::MouseButton &evt) {
     }
 
     circle_->OnMouseUp(evt);
+    circle_->OnDeselect();
     OnEnd();
     return true;
 }
@@ -76,6 +82,7 @@ bool ArrowTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
 
     is_drawing_ = true;
     arrow_->SetPos(evt.pos);
+    arrow_->OnSelect();
     return true;
 }
 
@@ -85,6 +92,7 @@ bool ArrowTool::OnMouseUp(const dr4::Event::MouseButton &evt) {
     }
 
     arrow_->OnMouseUp(evt);
+    arrow_->OnDeselect();
     OnEnd();
     return true;
 }
@@ -99,3 +107,5 @@ bool ArrowTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 }
 
 //------------------------------------------------------------------------------------------------------------
+
+};

@@ -8,6 +8,8 @@
 
 #include "dr4/math/rect.hpp"
 
+namespace pp {
+
 static const float kEpsilon = 0.01;
 
 class Rectangle : public pp::Shape {
@@ -97,7 +99,8 @@ class Circle : public pp::Shape {
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
-            circle_->SetPos(pos);
+            center_ = pos;
+            circle_->SetCenter(pos);
         };
 
         virtual dr4::Vec2f GetPos() const override {
@@ -208,6 +211,8 @@ class Arrow : public pp::Shape {
                     && (cos > cos_line - kEpsilon)
                     && (cos < cos_line + kEpsilon);
         };
+};
+
 };
 
 #endif // GEOM_PRIM_HPP

@@ -6,6 +6,8 @@
 
 #include "geom_prim.hpp"
 
+namespace pp {
+
 class RectangleTool : public pp::Tool {
     private:
         pp::Canvas* cvs_;
@@ -22,6 +24,8 @@ class RectangleTool : public pp::Tool {
     public:
         RectangleTool(pp::Canvas* cvs)
             :cvs_(cvs), is_drawing_(false), rect_(NULL) {};
+
+        ~RectangleTool() = default;
 
         virtual std::string_view Icon() const override {return kIcon;};
         virtual std::string_view Name() const override {return kName;};
@@ -71,6 +75,8 @@ class CircleTool : public pp::Tool {
         CircleTool(pp::Canvas* cvs)
             :cvs_(cvs), is_drawing_(false), circle_(NULL) {};
 
+        ~CircleTool() = default;
+
         virtual std::string_view Icon() const override {return kIcon;};
         virtual std::string_view Name() const override {return kName;};
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
@@ -119,6 +125,8 @@ class ArrowTool : public pp::Tool {
         ArrowTool(pp::Canvas* cvs)
             :cvs_(cvs), is_drawing_(false), arrow_(NULL) {};
 
+        ~ArrowTool() = default;
+
         virtual std::string_view Icon() const override {return kIcon;};
         virtual std::string_view Name() const override {return kName;};
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
@@ -150,6 +158,8 @@ class ArrowTool : public pp::Tool {
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
         virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+};
+
 };
 
 #endif // GEOM_PRIM_TOOLS_HPP

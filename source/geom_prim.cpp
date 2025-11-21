@@ -2,6 +2,8 @@
 
 #include <math.h>
 
+namespace pp {
+
 //----------RECTANGLE-----------------------------------------------------------------------------------------
 
 bool Rectangle::OnMouseDown(const dr4::Event::MouseButton &evt) {
@@ -168,3 +170,5 @@ bool Arrow::OnMouseMove(const dr4::Event::MouseMove &evt) {
     line3_->SetEnd(end_ - (vec - ortho) * kArrowLen / len);
     return true;
 }
+
+};

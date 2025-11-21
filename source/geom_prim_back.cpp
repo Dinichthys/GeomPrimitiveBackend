@@ -6,9 +6,9 @@
 std::vector<std::unique_ptr<::pp::Tool>> GeomPrimBack::CreateTools(pp::Canvas *cvs) {
     std::vector<std::unique_ptr<::pp::Tool>> res;
 
-    res.push_back(std::unique_ptr<::pp::Tool>(new RectangleTool(cvs)));
-    res.push_back(std::unique_ptr<::pp::Tool>(new CircleTool(cvs)));
-    res.push_back(std::unique_ptr<::pp::Tool>(new ArrowTool(cvs)));
+    res.emplace_back(std::make_unique<pp::RectangleTool>(cvs));
+    res.emplace_back(std::make_unique<pp::CircleTool>(cvs));
+    res.emplace_back(std::make_unique<pp::ArrowTool>(cvs));
 
     return res;
 }
