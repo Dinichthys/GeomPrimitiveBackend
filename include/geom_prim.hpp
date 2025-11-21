@@ -12,6 +12,8 @@ static const float kEpsilon = 0.01;
 
 class Rectangle : public pp::Shape {
     private:
+        pp::Canvas* cvs_;
+
         bool selected_;
 
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
@@ -21,7 +23,8 @@ class Rectangle : public pp::Shape {
         dr4::Rect2f rect_info_;
 
     public:
-        Rectangle(dr4::Rectangle* rect) {
+        Rectangle(dr4::Rectangle* rect, pp::Canvas* cvs) {
+            cvs_ = cvs;
             rect_ = rect; rect_info_ = {};
             rect_->SetBorderColor(kBorderColor);
             rect_->SetBorderThickness(kBorderThickness);
@@ -61,6 +64,8 @@ class Rectangle : public pp::Shape {
 
 class Circle : public pp::Shape {
     private:
+        pp::Canvas* cvs_;
+
         bool selected_;
 
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
@@ -70,7 +75,8 @@ class Circle : public pp::Shape {
         dr4::Vec2f center_;
 
     public:
-        Circle(dr4::Circle* circle) {
+        Circle(dr4::Circle* circle, pp::Canvas* cvs) {
+            cvs_ = cvs;
             circle_ = circle;
             circle_->SetBorderColor(kBorderColor);
             circle_->SetBorderThickness(kBorderThickness);
@@ -109,6 +115,8 @@ class Circle : public pp::Shape {
 
 class Arrow : public pp::Shape {
     private:
+        pp::Canvas* cvs_;
+
         bool selected_;
 
         const dr4::Color kFillColor = {dr4::Color::ColorMaxValue, 0, 0};
@@ -124,7 +132,8 @@ class Arrow : public pp::Shape {
         dr4::Vec2f end_;
 
     public:
-        Arrow(dr4::Line* line1, dr4::Line* line2, dr4::Line* line3) {
+        Arrow(dr4::Line* line1, dr4::Line* line2, dr4::Line* line3, pp::Canvas* cvs) {
+            cvs_ = cvs;
             line1_ = line1;
             line2_ = line2;
             line3_ = line3;

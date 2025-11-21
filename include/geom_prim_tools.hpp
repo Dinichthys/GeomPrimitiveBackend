@@ -29,9 +29,11 @@ class RectangleTool : public pp::Tool {
 
         virtual void OnStart() override {
             is_drawing_ = true;
-            rect_ = new Rectangle(cvs_->GetWindow()->CreateRectangle());
+            rect_ = new Rectangle(cvs_->GetWindow()->CreateRectangle(), cvs_);
             rect_->SetTheme(cvs_->GetControlsTheme());
             shape_idx = cvs_->AddShape(rect_);
+            cvs_->GetState()->selectedShape = rect_;
+            cvs_->GetState()->selectedTool = this;
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
@@ -43,6 +45,8 @@ class RectangleTool : public pp::Tool {
         virtual void OnEnd() override {
             rect_ = NULL;
             is_drawing_ = false;
+            cvs_->GetState()->selectedShape = NULL;
+            cvs_->GetState()->selectedTool = NULL;
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -73,9 +77,11 @@ class CircleTool : public pp::Tool {
 
         virtual void OnStart() override {
             is_drawing_ = true;
-            circle_ = new Circle(cvs_->GetWindow()->CreateCircle());
+            circle_ = new Circle(cvs_->GetWindow()->CreateCircle(), cvs_);
             circle_->SetTheme(cvs_->GetControlsTheme());
             shape_idx = cvs_->AddShape(circle_);
+            cvs_->GetState()->selectedShape = circle_;
+            cvs_->GetState()->selectedTool = this;
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
@@ -87,6 +93,8 @@ class CircleTool : public pp::Tool {
         virtual void OnEnd() override {
             circle_ = NULL;
             is_drawing_ = false;
+            cvs_->GetState()->selectedShape = NULL;
+            cvs_->GetState()->selectedTool = NULL;
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -119,9 +127,11 @@ class ArrowTool : public pp::Tool {
             is_drawing_ = true;
             arrow_ = new Arrow(cvs_->GetWindow()->CreateLine(),
                                cvs_->GetWindow()->CreateLine(),
-                               cvs_->GetWindow()->CreateLine());
+                               cvs_->GetWindow()->CreateLine(), cvs_);
             arrow_->SetTheme(cvs_->GetControlsTheme());
             shape_idx = cvs_->AddShape(arrow_);
+            cvs_->GetState()->selectedShape = arrow_;
+            cvs_->GetState()->selectedTool = this;
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
@@ -133,6 +143,8 @@ class ArrowTool : public pp::Tool {
         virtual void OnEnd() override {
             arrow_ = NULL;
             is_drawing_ = false;
+            cvs_->GetState()->selectedShape = NULL;
+            cvs_->GetState()->selectedTool = NULL;
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
