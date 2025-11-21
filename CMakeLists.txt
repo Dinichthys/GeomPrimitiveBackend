@@ -4,6 +4,7 @@ project (geomprim CXX)
 add_library (${PROJECT_NAME} SHARED
     source/geom_prim_back.cpp
     source/geom_prim.cpp
+    source/geom_prim_tools.cpp
 )
 
 target_include_directories (${PROJECT_NAME}
