@@ -28,7 +28,7 @@ class RectangleTool : public pp::Tool {
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
 
         virtual void OnStart() override {
-            is_drawing_ = true;
+            is_drawing_ = false;
             rect_ = new Rectangle(cvs_->GetWindow()->CreateRectangle(), cvs_);
             rect_->SetTheme(cvs_->GetControlsTheme());
             shape_idx = cvs_->AddShape(rect_);
@@ -76,7 +76,7 @@ class CircleTool : public pp::Tool {
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
 
         virtual void OnStart() override {
-            is_drawing_ = true;
+            is_drawing_ = false;
             circle_ = new Circle(cvs_->GetWindow()->CreateCircle(), cvs_);
             circle_->SetTheme(cvs_->GetControlsTheme());
             shape_idx = cvs_->AddShape(circle_);
@@ -124,7 +124,7 @@ class ArrowTool : public pp::Tool {
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
 
         virtual void OnStart() override {
-            is_drawing_ = true;
+            is_drawing_ = false;
             arrow_ = new Arrow(cvs_->GetWindow()->CreateLine(),
                                cvs_->GetWindow()->CreateLine(),
                                cvs_->GetWindow()->CreateLine(), cvs_);
