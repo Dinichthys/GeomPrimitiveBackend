@@ -5,8 +5,8 @@ namespace pp {
 //----------RECTANGLE-----------------------------------------------------------------------------------------
 
 bool RectangleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
-    if ((!is_drawing_ && (cvs_->GetState()->selectedShape == NULL))
-        || (cvs_->GetState()->selectedShape != rect_)) {
+    if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
+        || (cvs_->GetSelectedShape() != rect_)) {
         OnStart();
         return true;
     }
@@ -40,8 +40,8 @@ bool RectangleTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 //----------CIRCLE--------------------------------------------------------------------------------------------
 
 bool CircleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
-    if ((!is_drawing_ && (cvs_->GetState()->selectedShape == NULL))
-        || (cvs_->GetState()->selectedShape != circle_)) {
+    if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
+        || (cvs_->GetSelectedShape() != circle_)) {
         OnStart();
         return true;
     }
@@ -74,8 +74,8 @@ bool CircleTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 //----------ARROW---------------------------------------------------------------------------------------------
 
 bool ArrowTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
-    if ((!is_drawing_ && (cvs_->GetState()->selectedShape == NULL))
-        || (cvs_->GetState()->selectedShape != arrow_)) {
+    if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
+        || (cvs_->GetSelectedShape() != arrow_)) {
         OnStart();
         return true;
     }

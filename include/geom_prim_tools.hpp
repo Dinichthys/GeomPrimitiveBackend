@@ -16,8 +16,6 @@ class RectangleTool : public pp::Tool {
 
         Rectangle* rect_;
 
-        size_t shape_idx;
-
         const std::string kIcon = "󰗆";
         const std::string kName = "RectangleTool";
 
@@ -35,22 +33,20 @@ class RectangleTool : public pp::Tool {
             is_drawing_ = false;
             rect_ = new Rectangle(cvs_->GetWindow()->CreateRectangle(), cvs_);
             rect_->SetTheme(cvs_->GetControlsTheme());
-            shape_idx = cvs_->AddShape(rect_);
-            cvs_->GetState()->selectedShape = rect_;
-            cvs_->GetState()->selectedTool = this;
+            cvs_->AddShape(rect_);
+            cvs_->SetSelectedShape(rect_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
                 return;
             }
-            cvs_->DelShape(shape_idx);
+            cvs_->DelShape(rect_);
             OnEnd();
         };
         virtual void OnEnd() override {
             rect_ = NULL;
             is_drawing_ = false;
-            cvs_->GetState()->selectedShape = NULL;
-            cvs_->GetState()->selectedTool = NULL;
+            cvs_->SetSelectedShape(NULL);
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -65,8 +61,6 @@ class CircleTool : public pp::Tool {
         bool is_drawing_;
 
         Circle* circle_;
-
-        size_t shape_idx;
 
         const std::string kIcon = "";
         const std::string kName = "CircleTool";
@@ -85,22 +79,20 @@ class CircleTool : public pp::Tool {
             is_drawing_ = false;
             circle_ = new Circle(cvs_->GetWindow()->CreateCircle(), cvs_);
             circle_->SetTheme(cvs_->GetControlsTheme());
-            shape_idx = cvs_->AddShape(circle_);
-            cvs_->GetState()->selectedShape = circle_;
-            cvs_->GetState()->selectedTool = this;
+            cvs_->AddShape(circle_);
+            cvs_->SetSelectedShape(circle_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
                 return;
             }
-            cvs_->DelShape(shape_idx);
+            cvs_->DelShape(circle_);
             OnEnd();
         };
         virtual void OnEnd() override {
             circle_ = NULL;
             is_drawing_ = false;
-            cvs_->GetState()->selectedShape = NULL;
-            cvs_->GetState()->selectedTool = NULL;
+            cvs_->SetSelectedShape(NULL);
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -115,8 +107,6 @@ class ArrowTool : public pp::Tool {
         bool is_drawing_;
 
         Arrow* arrow_;
-
-        size_t shape_idx;
 
         const std::string kIcon = "󰁜";
         const std::string kName = "ArrowTool";
@@ -137,22 +127,20 @@ class ArrowTool : public pp::Tool {
                                cvs_->GetWindow()->CreateLine(),
                                cvs_->GetWindow()->CreateLine(), cvs_);
             arrow_->SetTheme(cvs_->GetControlsTheme());
-            shape_idx = cvs_->AddShape(arrow_);
-            cvs_->GetState()->selectedShape = arrow_;
-            cvs_->GetState()->selectedTool = this;
+            cvs_->AddShape(arrow_);
+            cvs_->SetSelectedShape(arrow_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
                 return;
             }
-            cvs_->DelShape(shape_idx);
+            cvs_->DelShape(arrow_);
             OnEnd();
         };
         virtual void OnEnd() override {
             arrow_ = NULL;
             is_drawing_ = false;
-            cvs_->GetState()->selectedShape = NULL;
-            cvs_->GetState()->selectedTool = NULL;
+            cvs_->SetSelectedShape(NULL);
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;

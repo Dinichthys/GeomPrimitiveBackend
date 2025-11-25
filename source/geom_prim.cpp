@@ -20,7 +20,7 @@ bool Rectangle::OnMouseDown(const dr4::Event::MouseButton &evt) {
     internal_rect.size = {internal_rect.size.x - kBorderThickness, internal_rect.size.y - kBorderThickness};
 
     if ((external_rect.Contains(evt.pos)) && (!internal_rect.Contains(evt.pos))) {
-        cvs_->GetState()->selectedShape = this;
+        cvs_->SetSelectedShape(this);
         selected_ = true;
         return true;
     }
@@ -48,7 +48,8 @@ bool Rectangle::OnMouseUp(const dr4::Event::MouseButton &evt) {
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     rect_->SetSize(rect_info_.size);
 
-    cvs_->GetState()->selectedShape = NULL;
+    cvs_->SetSelectedShape(NULL);
+    selected_ = false;
     return true;
 }
 
@@ -87,7 +88,7 @@ bool Circle::OnMouseDown(const dr4::Event::MouseButton &evt) {
     float cur_radius = sqrt(evt.pos.x * evt.pos.x + evt.pos.y * evt.pos.y);
     if ((cur_radius > radius_circle - kBorderThickness)
         && (cur_radius < radius_circle + kBorderThickness)) {
-        cvs_->GetState()->selectedShape = this;
+        cvs_->SetSelectedShape(this);
         selected_ = true;
         return true;
     }
@@ -103,7 +104,8 @@ bool Circle::OnMouseUp(const dr4::Event::MouseButton &evt) {
     dr4::Vec2f vec = evt.pos - center_;
     float radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     circle_->SetRadius(radius);
-    cvs_->GetState()->selectedShape = NULL;
+    cvs_->SetSelectedShape(NULL);
+    selected_ = false;
     return true;
 }
 
@@ -130,7 +132,7 @@ bool Arrow::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (IsLineContainPos(line1_, evt.pos)
         || IsLineContainPos(line2_, evt.pos)
         || IsLineContainPos(line3_, evt.pos)) {
-        cvs_->GetState()->selectedShape = this;
+        cvs_->SetSelectedShape(this);
         selected_ = true;
         return true;
     }
@@ -154,7 +156,8 @@ bool Arrow::OnMouseUp(const dr4::Event::MouseButton &evt) {
 
     line3_->SetStart(end_ + ortho * kWidth / len);
     line3_->SetEnd(end_ - (vec - ortho) * kArrowLen / len);
-    cvs_->GetState()->selectedShape = NULL;
+    cvs_->SetSelectedShape(NULL);
+    selected_ = false;
     return true;
 }
 
