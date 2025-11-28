@@ -102,11 +102,13 @@ class Circle : public pp::Shape {
             circle_->SetFillColor({0, 0, 0, 0});
             border_ = cvs->GetWindow()->CreateRectangle();
             border_->SetFillColor({0, 0, 0, 0});
+            border_->SetBorderThickness(kBorderThickness);
             selected_ = false;
         };
 
         ~Circle() {
             delete circle_;
+            delete border_;
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -115,7 +117,7 @@ class Circle : public pp::Shape {
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             if (selected_) {
-                circle_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
+                circle_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
             } else {
                 circle_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
             }
@@ -164,6 +166,8 @@ class Arrow : public pp::Shape {
         dr4::Line* line2_;
         dr4::Line* line3_;
 
+        dr4::Rectangle* border_;
+
         dr4::Vec2f start_;
         dr4::Vec2f end_;
 
@@ -179,6 +183,11 @@ class Arrow : public pp::Shape {
             line2_->SetThickness(kWidth);
             line3_->SetColor(kFillColor);
             line3_->SetThickness(kWidth);
+
+            border_ = cvs->GetWindow()->CreateRectangle();
+            border_->SetFillColor({0, 0, 0, 0});
+            border_->SetBorderThickness(kWidth);
+
             selected_ = false;
         };
 
@@ -186,6 +195,8 @@ class Arrow : public pp::Shape {
             delete line1_;
             delete line2_;
             delete line3_;
+
+            delete border_;
         }
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -193,9 +204,45 @@ class Arrow : public pp::Shape {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
+            if (selected_) {
+                line1_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
+                line2_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
+                line3_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
+            } else {
+                line1_->SetColor(cvs_->GetControlsTheme().lineColor);
+                line2_->SetColor(cvs_->GetControlsTheme().lineColor);
+                line3_->SetColor(cvs_->GetControlsTheme().lineColor);
+            }
+
             line1_->DrawOn(texture);
             line2_->DrawOn(texture);
             line3_->DrawOn(texture);
+
+            if (selected_) {
+                float min_x = std::min(line1_->GetStart().x,
+                              std::min(line1_->GetEnd().x,
+                              std::min(line2_->GetStart().x,
+                              std::min(line2_->GetEnd().x,
+                              std::min(line3_->GetStart().x, line3_->GetEnd().x)))));
+                float min_y = std::min(line1_->GetStart().y,
+                              std::min(line1_->GetEnd().y,
+                              std::min(line2_->GetStart().y,
+                              std::min(line2_->GetEnd().y,
+                              std::min(line3_->GetStart().y, line3_->GetEnd().y)))));
+                float max_x = std::max(line1_->GetStart().x,
+                              std::max(line1_->GetEnd().x,
+                              std::max(line2_->GetStart().x,
+                              std::max(line2_->GetEnd().x,
+                              std::max(line3_->GetStart().x, line3_->GetEnd().x)))));
+                float max_y = std::max(line1_->GetStart().y,
+                              std::max(line1_->GetEnd().y,
+                              std::max(line2_->GetStart().y,
+                              std::max(line2_->GetEnd().y,
+                              std::max(line3_->GetStart().y, line3_->GetEnd().y)))));
+                border_->SetPos({min_x, min_y});
+                border_->SetSize({max_x - min_x, max_y - min_y});
+                border_->DrawOn(texture);
+            }
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
@@ -224,6 +271,8 @@ class Arrow : public pp::Shape {
             line1_->SetColor(theme.lineColor);
             line2_->SetColor(theme.lineColor);
             line3_->SetColor(theme.lineColor);
+
+            border_->SetBorderColor(theme.handleColor);
         };
 
     private:
