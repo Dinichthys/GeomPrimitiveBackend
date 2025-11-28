@@ -23,6 +23,7 @@ class Rectangle : public pp::Shape {
 
         dr4::Rectangle* rect_;
         dr4::Rect2f rect_info_;
+        dr4::Circle* resize_dot_;
 
     public:
         Rectangle(dr4::Rectangle* rect, pp::Canvas* cvs) {
@@ -32,10 +33,13 @@ class Rectangle : public pp::Shape {
             rect_->SetBorderThickness(kBorderThickness);
             rect_->SetFillColor({0, 0, 0, 0});
             selected_ = false;
+            resize_dot_ = cvs->GetWindow()->CreateCircle();
+            resize_dot_->SetRadius(kBorderThickness);
         };
 
         ~Rectangle() {
             delete rect_;
+            delete resize_dot_;
         };
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
@@ -45,8 +49,10 @@ class Rectangle : public pp::Shape {
         virtual void DrawOn(dr4::Texture& texture) const override {
             if (selected_) {
                 rect_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
+                resize_dot_->SetCenter(rect_info_.pos + rect_info_.size);
+                resize_dot_->DrawOn(texture);
             } else {
-                rect_->SetBorderColor(cvs_->GetControlsTheme().shapeColor);
+                rect_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
             }
 
             rect_->DrawOn(texture);
@@ -67,6 +73,7 @@ class Rectangle : public pp::Shape {
         void SetTheme(const pp::ControlsTheme& theme) {
             rect_->SetFillColor(theme.shapeColor);
             rect_->SetBorderColor(theme.lineColor);
+            resize_dot_->SetFillColor(theme.handleHoverColor);
         };
 };
 
