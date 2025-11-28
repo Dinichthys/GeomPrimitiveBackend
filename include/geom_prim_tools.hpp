@@ -16,7 +16,7 @@ class RectangleTool : public pp::Tool {
 
         Rectangle* rect_;
 
-        const std::string kIcon = "󰗆";
+        const std::string kIcon = "\ue88b";
         const std::string kName = "RectangleTool";
 
     public:
@@ -60,7 +60,7 @@ class CircleTool : public pp::Tool {
 
         Circle* circle_;
 
-        const std::string kIcon = "";
+        const std::string kIcon = "\ueabc";
         const std::string kName = "CircleTool";
 
     public:
@@ -104,7 +104,7 @@ class ArrowTool : public pp::Tool {
 
         Arrow* arrow_;
 
-        const std::string kIcon = "󰁜";
+        const std::string kIcon = "\uf46c";
         const std::string kName = "ArrowTool";
 
     public:
