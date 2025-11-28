@@ -49,13 +49,16 @@ class Rectangle : public pp::Shape {
         virtual void DrawOn(dr4::Texture& texture) const override {
             if (selected_) {
                 rect_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
-                resize_dot_->SetCenter(rect_info_.pos + rect_info_.size);
-                resize_dot_->DrawOn(texture);
             } else {
                 rect_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
             }
 
             rect_->DrawOn(texture);
+
+            if (selected_) {
+                resize_dot_->SetCenter(rect_info_.pos + rect_info_.size);
+                resize_dot_->DrawOn(texture);
+            }
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
@@ -88,6 +91,7 @@ class Circle : public pp::Shape {
 
         dr4::Circle* circle_;
         dr4::Vec2f center_;
+        dr4::Rectangle* border_;
 
     public:
         Circle(dr4::Circle* circle, pp::Canvas* cvs) {
@@ -96,6 +100,8 @@ class Circle : public pp::Shape {
             circle_->SetBorderColor(kBorderColor);
             circle_->SetBorderThickness(kBorderThickness);
             circle_->SetFillColor({0, 0, 0, 0});
+            border_ = cvs->GetWindow()->CreateRectangle();
+            border_->SetFillColor({0, 0, 0, 0});
             selected_ = false;
         };
 
@@ -108,7 +114,20 @@ class Circle : public pp::Shape {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
+            if (selected_) {
+                circle_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
+            } else {
+                circle_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+            }
+
             circle_->DrawOn(texture);
+
+            if (selected_) {
+                float radius = circle_->GetRadius().x;
+                border_->SetPos(center_ - dr4::Vec2f(radius, radius));
+                border_->SetSize({2 * radius, 2 * radius});
+                border_->DrawOn(texture);
+            }
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
@@ -126,6 +145,7 @@ class Circle : public pp::Shape {
         void SetTheme(const pp::ControlsTheme& theme) {
             circle_->SetFillColor(theme.shapeColor);
             circle_->SetBorderColor(theme.lineColor);
+            border_->SetBorderColor(theme.handleColor);
         };
 };
 
