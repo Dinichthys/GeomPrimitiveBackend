@@ -71,6 +71,7 @@ bool CircleTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
     circle_->OnMouseMove(evt);
     return true;
 }
+
 //----------ARROW---------------------------------------------------------------------------------------------
 
 bool ArrowTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
@@ -103,6 +104,41 @@ bool ArrowTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
     }
 
     arrow_->OnMouseMove(evt);
+    return true;
+}
+
+//----------PENIS---------------------------------------------------------------------------------------------
+
+bool PenisTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
+        || (cvs_->GetSelectedShape() != penis_)) {
+        OnStart();
+        return true;
+    }
+
+    is_drawing_ = true;
+    penis_->SetPos(evt.pos);
+    penis_->OnSelect();
+    return true;
+}
+
+bool PenisTool::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!is_drawing_) {
+        return false;
+    }
+
+    penis_->OnMouseUp(evt);
+    penis_->OnDeselect();
+    OnEnd();
+    return true;
+}
+
+bool PenisTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!is_drawing_) {
+        return false;
+    }
+
+    penis_->OnMouseMove(evt);
     return true;
 }
 

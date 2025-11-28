@@ -294,6 +294,168 @@ class Arrow : public pp::Shape {
         };
 };
 
+class Penis : public pp::Shape {
+    private:
+        pp::Canvas* cvs_;
+
+        bool selected_;
+
+        const dr4::Color kFillColor = {dr4::Color::ColorMaxValue, 0, 0};
+        const float kWidth = 3;
+        const float kBallsRadius = 5;
+        const float kWidthDivSqrt2 = kWidth / sqrt(2);
+
+        dr4::Line* line1_;
+        dr4::Line* line2_;
+
+        dr4::Circle* ball1_;
+        dr4::Circle* ball2_;
+        dr4::Circle* ending_;
+
+        dr4::Rectangle* border_;
+
+        dr4::Vec2f start_;
+        dr4::Vec2f end_;
+
+    public:
+        Penis(pp::Canvas* cvs) {
+            cvs_ = cvs;
+            line1_ = cvs->GetWindow()->CreateLine();
+            line2_ = cvs->GetWindow()->CreateLine();
+            ball1_ = cvs->GetWindow()->CreateCircle();
+            ball2_ = cvs->GetWindow()->CreateCircle();
+            ending_ = cvs->GetWindow()->CreateCircle();
+
+            line1_->SetColor(kFillColor);
+            line1_->SetThickness(kWidth);
+            line2_->SetColor(kFillColor);
+            line2_->SetThickness(kWidth);
+
+            ball1_->SetFillColor({0, 0, 0, 0});
+            ball1_->SetRadius(kBallsRadius);
+            ball1_->SetBorderThickness(kWidth);
+            ball1_->SetBorderColor(kFillColor);
+
+
+            ball2_->SetFillColor({0, 0, 0, 0});
+            ball2_->SetRadius(kBallsRadius);
+            ball2_->SetBorderThickness(kWidth);
+            ball2_->SetBorderColor(kFillColor);
+
+            ending_->SetFillColor({0, 0, 0, 0});
+            ending_->SetRadius(kBallsRadius);
+            ending_->SetBorderThickness(kWidth);
+            ending_->SetBorderColor(kFillColor);
+
+            border_ = cvs->GetWindow()->CreateRectangle();
+            border_->SetFillColor({0, 0, 0, 0});
+            border_->SetBorderThickness(kWidth);
+
+            selected_ = false;
+        };
+
+        ~Penis() {
+            delete line1_;
+            delete line2_;
+
+            delete ball1_;
+            delete ball2_;
+            delete ending_;
+
+            delete border_;
+        }
+
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+
+        virtual void DrawOn(dr4::Texture& texture) const override {
+            if (selected_) {
+                line1_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
+                line2_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
+                ball1_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
+                ball2_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
+                ending_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
+            } else {
+                line1_->SetColor(cvs_->GetControlsTheme().lineColor);
+                line2_->SetColor(cvs_->GetControlsTheme().lineColor);
+                ball1_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+                ball2_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+                ending_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+            }
+
+            line1_->DrawOn(texture);
+            line2_->DrawOn(texture);
+            ball1_->DrawOn(texture);
+            ball2_->DrawOn(texture);
+            ending_->DrawOn(texture);
+
+            // if (selected_) {
+            //     float min_x = std::min(line1_->GetStart().x,
+            //                   std::min(line1_->GetEnd().x,
+            //                   std::min(line2_->GetStart().x,
+            //                   std::min(line2_->GetEnd().x,
+            //                   std::min(line3_->GetStart().x, line3_->GetEnd().x)))));
+            //     float min_y = std::min(line1_->GetStart().y,
+            //                   std::min(line1_->GetEnd().y,
+            //                   std::min(line2_->GetStart().y,
+            //                   std::min(line2_->GetEnd().y,
+            //                   std::min(line3_->GetStart().y, line3_->GetEnd().y)))));
+            //     float max_x = std::max(line1_->GetStart().x,
+            //                   std::max(line1_->GetEnd().x,
+            //                   std::max(line2_->GetStart().x,
+            //                   std::max(line2_->GetEnd().x,
+            //                   std::max(line3_->GetStart().x, line3_->GetEnd().x)))));
+            //     float max_y = std::max(line1_->GetStart().y,
+            //                   std::max(line1_->GetEnd().y,
+            //                   std::max(line2_->GetStart().y,
+            //                   std::max(line2_->GetEnd().y,
+            //                   std::max(line3_->GetStart().y, line3_->GetEnd().y)))));
+            //     border_->SetPos({min_x, min_y});
+            //     border_->SetSize({max_x - min_x, max_y - min_y});
+            //     border_->DrawOn(texture);
+            // }
+        };
+
+        virtual void SetPos(dr4::Vec2f pos) override {
+            dr4::Vec2f vec = end_ - start_;
+            float len = sqrt(vec.x * vec.x + vec.y * vec.y);
+
+            dr4::Vec2f center1 = pos - dr4::Vec2f(vec.y, vec.x) / len * kBallsRadius;
+            dr4::Vec2f center2 = pos + dr4::Vec2f(vec.y, vec.x) / len * kBallsRadius;
+
+            ball1_->SetCenter(center1);
+            ball2_->SetCenter(center2);
+
+            line1_->SetStart(center1 + vec / len * kBallsRadius);
+            line1_->SetEnd(center1 + vec / len * (len - kBallsRadius));
+
+            line2_->SetStart(center2 + vec / len * kBallsRadius);
+            line2_->SetEnd(center2 + vec / len * (len - kBallsRadius));
+
+            ending_->SetCenter(pos + vec / len * (len - kBallsRadius));
+            end_ = vec + pos;
+            start_ = pos;
+        };
+
+        virtual dr4::Vec2f GetPos() const override {
+            return start_;
+        };
+
+        virtual void OnSelect() override {selected_ = true;};
+        virtual void OnDeselect() override {selected_ = false;};
+
+        void SetTheme(const pp::ControlsTheme& theme) {
+            line1_->SetColor(theme.lineColor);
+            line2_->SetColor(theme.lineColor);
+            ball1_->SetBorderColor(theme.lineColor);
+            ball2_->SetBorderColor(theme.lineColor);
+            ending_->SetBorderColor(theme.lineColor);
+
+            border_->SetBorderColor(theme.handleColor);
+        };
+};
+
 };
 
 #endif // GEOM_PRIM_HPP

@@ -193,4 +193,78 @@ bool Arrow::OnMouseMove(const dr4::Event::MouseMove &evt) {
     return true;
 }
 
+//----------PENIS---------------------------------------------------------------------------------------------
+
+bool Penis::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if (selected_) {
+        SetPos(evt.pos);
+        return true;
+    }
+
+    float radius_circle = kWidth;
+    dr4::Vec2f vec = evt.pos - end_;
+    float cur_radius = sqrt(vec.x * vec.x + vec.y * vec.y);
+    if ((cur_radius < radius_circle)) {
+        cvs_->SetSelectedShape(this);
+        selected_ = true;
+        return true;
+    }
+
+    return false;
+}
+
+bool Penis::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    end_ = evt.pos;
+    dr4::Vec2f vec = end_ - start_;
+    float len = sqrt(vec.x * vec.x + vec.y * vec.y);
+
+    dr4::Vec2f center1 = start_ - dr4::Vec2f(vec.y, -vec.x) / len * kBallsRadius;
+    dr4::Vec2f center2 = start_ + dr4::Vec2f(vec.y, -vec.x) / len * kBallsRadius;
+
+    ball1_->SetCenter(center1);
+    ball2_->SetCenter(center2);
+
+    line1_->SetStart(center1 + vec / len * kBallsRadius);
+    line1_->SetEnd(center1 + vec / len * (len - kBallsRadius));
+
+    line2_->SetStart(center2 + vec / len * kBallsRadius);
+    line2_->SetEnd(center2 + vec / len * (len - kBallsRadius));
+
+    ending_->SetCenter(start_ + vec / len * (len - kBallsRadius));
+
+    cvs_->SetSelectedShape(NULL);
+    selected_ = false;
+    return true;
+}
+
+bool Penis::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    end_ = evt.pos;
+    dr4::Vec2f vec = end_ - start_;
+    float len = sqrt(vec.x * vec.x + vec.y * vec.y);
+
+    dr4::Vec2f center1 = start_ - dr4::Vec2f(vec.y, -vec.x) / len * kBallsRadius;
+    dr4::Vec2f center2 = start_ + dr4::Vec2f(vec.y, -vec.x) / len * kBallsRadius;
+
+    ball1_->SetCenter(center1);
+    ball2_->SetCenter(center2);
+
+    line1_->SetStart(center1 + vec / len * kBallsRadius);
+    line1_->SetEnd(center1 + vec / len * (len - kBallsRadius));
+
+    line2_->SetStart(center2 + vec / len * kBallsRadius);
+    line2_->SetEnd(center2 + vec / len * (len - kBallsRadius));
+
+    ending_->SetCenter(start_ + vec / len * (len - kBallsRadius));
+
+    return true;
+}
+
 };
