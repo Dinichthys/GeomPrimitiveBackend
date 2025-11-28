@@ -43,6 +43,12 @@ class Rectangle : public pp::Shape {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
+            if (selected_) {
+                rect_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
+            } else {
+                rect_->SetBorderColor(cvs_->GetControlsTheme().shapeColor);
+            }
+
             rect_->DrawOn(texture);
         };
 
