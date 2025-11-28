@@ -56,7 +56,6 @@ class Rectangle : public pp::Shape {
             rect_->DrawOn(texture);
 
             if (selected_) {
-                resize_dot_->SetCenter(rect_info_.pos + rect_info_.size);
                 resize_dot_->DrawOn(texture);
             }
         };

@@ -10,6 +10,9 @@ bool Rectangle::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (selected_) {
         rect_info_.pos = evt.pos;
         rect_->SetPos(rect_info_.pos);
+
+        resize_dot_->SetCenter(evt.pos);
+
         return true;
     }
 
@@ -22,6 +25,9 @@ bool Rectangle::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((external_rect.Contains(evt.pos)) && (!internal_rect.Contains(evt.pos))) {
         cvs_->SetSelectedShape(this);
         selected_ = true;
+
+        resize_dot_->SetCenter(evt.pos);
+
         return true;
     }
 
@@ -52,6 +58,7 @@ bool Rectangle::OnMouseUp(const dr4::Event::MouseButton &evt) {
 
     cvs_->SetSelectedShape(NULL);
     selected_ = false;
+
     return true;
 }
 
@@ -74,6 +81,9 @@ bool Rectangle::OnMouseMove(const dr4::Event::MouseMove &evt) {
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     rect_->SetSize(rect_info_.size);
+
+    resize_dot_->SetCenter(evt.pos);
+
     return true;
 }
 
