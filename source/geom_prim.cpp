@@ -84,8 +84,9 @@ bool Circle::OnMouseDown(const dr4::Event::MouseButton &evt) {
         return true;
     }
 
-    float radius_circle = sqrt(center_.x * center_.x + center_.y * center_.y);
-    float cur_radius = sqrt(evt.pos.x * evt.pos.x + evt.pos.y * evt.pos.y);
+    float radius_circle = circle_->GetRadius().x;
+    dr4::Vec2f vec = evt.pos - center_;
+    float cur_radius = sqrt(vec.x * vec.x + vec.y * vec.y);
     if ((cur_radius > radius_circle - kBorderThickness)
         && (cur_radius < radius_circle + kBorderThickness)) {
         cvs_->SetSelectedShape(this);
@@ -123,7 +124,7 @@ bool Circle::OnMouseMove(const dr4::Event::MouseMove &evt) {
 //----------ARROW---------------------------------------------------------------------------------------------
 
 bool Arrow::OnMouseDown(const dr4::Event::MouseButton &evt) {
-    if (!selected_) {
+    if (selected_) {
         start_ = evt.pos;
         line1_->SetStart(evt.pos);
         return true;
