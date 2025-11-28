@@ -269,4 +269,100 @@ bool Penis::OnMouseMove(const dr4::Event::MouseMove &evt) {
     return true;
 }
 
+//----------TEXT----------------------------------------------------------------------------------------------
+
+bool Text::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if (selected_) {
+        rect_info_.pos = evt.pos;
+        SetPos(evt.pos);
+        return true;
+    }
+
+    if (rect_info_.Contains(evt.pos)) {
+        cvs_->SetSelectedShape(this);
+        selected_ = true;
+        return true;
+    }
+
+    return false;
+}
+
+bool Text::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    rect_info_.size = evt.pos - rect_info_.pos;
+    if (rect_info_.size.x < 0) {
+        if (rect_info_.size.y < 0) {
+            rect_info_.pos = rect_info_.pos + rect_info_.size;
+        } else {
+            rect_info_.pos = {rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y};
+        }
+        texture_->SetPos(rect_info_.pos);
+    } else {
+        if (rect_info_.size.y < 0) {
+            rect_info_.pos = {rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y};
+            texture_->SetPos(rect_info_.pos);
+        }
+    }
+    rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
+    texture_->SetSize(rect_info_.size);
+
+    selected_ = false;
+    printing_ = true;
+
+    return true;
+}
+
+bool Text::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!selected_) {
+        return false;
+    }
+
+    rect_info_.size = evt.pos - rect_info_.pos;
+    if (rect_info_.size.x < 0) {
+        if (rect_info_.size.y < 0) {
+            rect_info_.pos = rect_info_.pos + rect_info_.size;
+        } else {
+            rect_info_.pos = {rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y};
+        }
+        texture_->SetPos(rect_info_.pos);
+    } else {
+        if (rect_info_.size.y < 0) {
+            rect_info_.pos = {rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y};
+            texture_->SetPos(rect_info_.pos);
+        }
+    }
+    rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
+    texture_->SetSize(rect_info_.size);
+
+    return true;
+}
+
+bool Text::OnKeyDown(const dr4::Event::KeyEvent &evt) {
+    if (!printing_) {
+        return false;
+    }
+
+    switch(evt.sym) {
+        case dr4::KeyCode::KEYCODE_ENTER :
+            printing_ = false;
+            cvs_->SetSelectedShape(NULL);
+            return true;
+        default:
+            return true;
+    }
+}
+
+bool Text::OnText(const dr4::Event::TextEvent &evt) {
+    if (!printing_) {
+        return false;
+    }
+
+    text_->SetText(text_->GetText() + evt.unicode);
+
+    return true;
+}
+
 };

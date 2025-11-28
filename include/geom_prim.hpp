@@ -8,6 +8,9 @@
 
 #include "dr4/math/rect.hpp"
 
+static const char* const kFontFileName = "/usr/share/fonts/TTF/CaskaydiaCoveNerdFontMono-Regular.ttf";
+static const float kFontSize = 20;
+
 namespace pp {
 
 static const float kEpsilon = 0.01;
@@ -439,6 +442,94 @@ class Penis : public pp::Shape {
             ball1_->SetBorderColor(theme.lineColor);
             ball2_->SetBorderColor(theme.lineColor);
             ending_->SetBorderColor(theme.lineColor);
+
+            border_->SetBorderColor(theme.handleColor);
+        };
+};
+
+class Text : public pp::Shape {
+    private:
+        pp::Canvas* cvs_;
+
+        bool selected_;
+        bool printing_;
+
+        const float kThickness = 5;
+
+        dr4::Texture* texture_;
+        dr4::Text* text_;
+
+        dr4::Rectangle* border_;
+
+        dr4::Rect2f rect_info_;
+
+    public:
+        Text(pp::Canvas* cvs) {
+            cvs_ = cvs;
+
+            texture_ = cvs->GetWindow()->CreateTexture();
+
+            text_ = cvs->GetWindow()->CreateText();
+            dr4::Font* font_ = cvs->GetWindow()->CreateFont();
+            if (font_ != NULL) {
+                font_->LoadFromFile(kFontFileName);
+                text_->SetFont(font_);
+            }
+            text_->SetText("");
+            text_->SetPos({0, 0});
+            text_->SetFontSize(kFontSize);
+
+            border_ = cvs->GetWindow()->CreateRectangle();
+            border_->SetFillColor({0, 0, 0, 0});
+            border_->SetBorderThickness(kThickness);
+
+            selected_ = false;
+            printing_ = false;
+        };
+
+        ~Text() {
+            delete texture_;
+            delete text_;
+
+            delete border_;
+        }
+
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+        virtual bool OnKeyDown(const dr4::Event::KeyEvent &) override;
+        virtual bool OnText(const dr4::Event::TextEvent &) override;
+
+        virtual void DrawOn(dr4::Texture& texture) const override {
+            if (selected_) {
+                text_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
+            } else {
+                text_->SetColor(cvs_->GetControlsTheme().lineColor);
+            }
+
+            text_->DrawOn(*texture_);
+            texture_->DrawOn(texture);
+
+            if (selected_ || printing_) {
+                border_->SetPos(texture_->GetPos());
+                border_->SetSize(texture_->GetSize());
+                border_->DrawOn(texture);
+            }
+        };
+
+        virtual void SetPos(dr4::Vec2f pos) override {
+            texture_->SetPos(pos);
+        };
+
+        virtual dr4::Vec2f GetPos() const override {
+            return texture_->GetPos();
+        };
+
+        virtual void OnSelect() override {selected_ = true;};
+        virtual void OnDeselect() override {selected_ = false;};
+
+        void SetTheme(const pp::ControlsTheme& theme) {
+            text_->SetColor(theme.lineColor);
 
             border_->SetBorderColor(theme.handleColor);
         };

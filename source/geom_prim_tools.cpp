@@ -142,6 +142,67 @@ bool PenisTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
     return true;
 }
 
+//----------TEXT----------------------------------------------------------------------------------------------
+
+bool TextTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
+        || (cvs_->GetSelectedShape() != text_)) {
+        OnStart();
+        return true;
+    }
+
+    is_drawing_ = true;
+    text_->SetPos(evt.pos);
+    text_->OnSelect();
+    return true;
+}
+
+bool TextTool::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!is_drawing_) {
+        return false;
+    }
+
+    text_->OnMouseUp(evt);
+    is_drawing_ = false;
+    is_printing_ = true;
+    cvs_->GetWindow()->StartTextInput();
+    return true;
+}
+
+bool TextTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!is_drawing_) {
+        return false;
+    }
+
+    text_->OnMouseMove(evt);
+    return true;
+}
+
+bool TextTool::OnKeyDown(const dr4::Event::KeyEvent &evt) {
+    if (!is_printing_) {
+        return false;
+    }
+
+    text_->OnKeyDown(evt);
+
+    if (evt.sym == dr4::KeyCode::KEYCODE_ENTER) {
+        text_->OnDeselect();
+        OnEnd();
+        cvs_->GetWindow()->StopTextInput();
+        is_printing_ = false;
+    }
+    return true;
+}
+
+bool TextTool::OnText(const dr4::Event::TextEvent &evt) {
+    if (!is_printing_) {
+        return false;
+    }
+
+    text_->OnText(evt);
+    return true;
+}
+
 //------------------------------------------------------------------------------------------------------------
 
 };

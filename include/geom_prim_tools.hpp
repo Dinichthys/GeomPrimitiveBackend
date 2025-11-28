@@ -186,6 +186,54 @@ class PenisTool : public pp::Tool {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 };
 
+class TextTool : public pp::Tool {
+    private:
+        pp::Canvas* cvs_;
+
+        bool is_drawing_;
+        bool is_printing_;
+
+        Text* text_;
+
+        const std::string kIcon = "T";
+        const std::string kName = "TextTool";
+
+    public:
+        TextTool(pp::Canvas* cvs)
+            :cvs_(cvs), is_drawing_(false), text_(NULL) {};
+
+        virtual std::string_view Icon() const override {return kIcon;};
+        virtual std::string_view Name() const override {return kName;};
+        virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
+
+        virtual void OnStart() override {
+            is_drawing_ = false;
+            is_printing_ = false;
+            text_ = new Text(cvs_);
+            text_->SetTheme(cvs_->GetControlsTheme());
+            cvs_->AddShape(text_);
+            cvs_->SetSelectedShape(text_);
+        };
+        virtual void OnBreak() override {
+            if (!is_drawing_) {
+                return;
+            }
+            cvs_->DelShape(text_);
+            OnEnd();
+        };
+        virtual void OnEnd() override {
+            text_ = NULL;
+            is_drawing_ = false;
+            cvs_->SetSelectedShape(NULL);
+        };
+
+        virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseUp(const dr4::Event::MouseButton &evt) override;
+        virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
+        virtual bool OnKeyDown(const dr4::Event::KeyEvent &) override;
+        virtual bool OnText(const dr4::Event::TextEvent &) override;
+};
+
 };
 
 #endif // GEOM_PRIM_TOOLS_HPP

@@ -10,6 +10,7 @@ std::vector<std::unique_ptr<::pp::Tool>> GeomPrimBack::CreateTools(pp::Canvas *c
     res.emplace_back(std::make_unique<pp::CircleTool>(cvs));
     res.emplace_back(std::make_unique<pp::ArrowTool>(cvs));
     res.emplace_back(std::make_unique<pp::PenisTool>(cvs));
+    res.emplace_back(std::make_unique<pp::TextTool>(cvs));
 
     return res;
 }
