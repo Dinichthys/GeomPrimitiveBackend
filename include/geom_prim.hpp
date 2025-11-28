@@ -428,10 +428,10 @@ class Penis : public pp::Shape {
             ball2_->SetCenter(center2);
 
             line1_->SetStart(center1 + vec / len * kBallsRadius);
-            line1_->SetEnd(center1 + vec / len * (len - kBallsRadius) - dr4::Vec2f(vec.y, -vec.x) / len * kWidth);
+            line1_->SetEnd(center1 + vec / len * (len - kBallsRadius));
 
             line2_->SetStart(center2 + vec / len * kBallsRadius);
-            line2_->SetEnd(center2 + vec / len * (len - kBallsRadius));
+            line2_->SetEnd(center2 + vec / len * (len - kBallsRadius) + dr4::Vec2f(vec.y, -vec.x) / len * kWidth);
 
             ending_->SetCenter(pos + vec / len * (len - kBallsRadius));
             end_ = vec + pos;
