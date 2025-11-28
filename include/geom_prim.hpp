@@ -390,31 +390,19 @@ class Penis : public pp::Shape {
             ball2_->DrawOn(texture);
             ending_->DrawOn(texture);
 
-            // if (selected_) {
-            //     float min_x = std::min(line1_->GetStart().x,
-            //                   std::min(line1_->GetEnd().x,
-            //                   std::min(line2_->GetStart().x,
-            //                   std::min(line2_->GetEnd().x,
-            //                   std::min(line3_->GetStart().x, line3_->GetEnd().x)))));
-            //     float min_y = std::min(line1_->GetStart().y,
-            //                   std::min(line1_->GetEnd().y,
-            //                   std::min(line2_->GetStart().y,
-            //                   std::min(line2_->GetEnd().y,
-            //                   std::min(line3_->GetStart().y, line3_->GetEnd().y)))));
-            //     float max_x = std::max(line1_->GetStart().x,
-            //                   std::max(line1_->GetEnd().x,
-            //                   std::max(line2_->GetStart().x,
-            //                   std::max(line2_->GetEnd().x,
-            //                   std::max(line3_->GetStart().x, line3_->GetEnd().x)))));
-            //     float max_y = std::max(line1_->GetStart().y,
-            //                   std::max(line1_->GetEnd().y,
-            //                   std::max(line2_->GetStart().y,
-            //                   std::max(line2_->GetEnd().y,
-            //                   std::max(line3_->GetStart().y, line3_->GetEnd().y)))));
-            //     border_->SetPos({min_x, min_y});
-            //     border_->SetSize({max_x - min_x, max_y - min_y});
-            //     border_->DrawOn(texture);
-            // }
+            if (selected_) {
+                float min_x = std::min(ball1_->GetCenter().x,
+                              std::min(ball2_->GetCenter().x, ending_->GetCenter().x));
+                float min_y = std::min(ball1_->GetCenter().y,
+                              std::min(ball2_->GetCenter().y, ending_->GetCenter().y));
+                float max_x = std::max(ball1_->GetCenter().x,
+                              std::max(ball2_->GetCenter().x, ending_->GetCenter().x));
+                float max_y = std::max(ball1_->GetCenter().y,
+                              std::max(ball2_->GetCenter().y, ending_->GetCenter().y));
+                border_->SetPos({min_x - kBallsRadius, min_y - kBallsRadius});
+                border_->SetSize({max_x - min_x + 2 * kBallsRadius, max_y - min_y + 2 * kBallsRadius});
+                border_->DrawOn(texture);
+            }
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
