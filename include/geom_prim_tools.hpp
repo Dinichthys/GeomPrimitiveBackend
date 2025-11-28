@@ -23,8 +23,6 @@ class RectangleTool : public pp::Tool {
         RectangleTool(pp::Canvas* cvs)
             :cvs_(cvs), is_drawing_(false), rect_(NULL) {};
 
-        ~RectangleTool() = default;
-
         virtual std::string_view Icon() const override {return kIcon;};
         virtual std::string_view Name() const override {return kName;};
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
@@ -69,8 +67,6 @@ class CircleTool : public pp::Tool {
         CircleTool(pp::Canvas* cvs)
             :cvs_(cvs), is_drawing_(false), circle_(NULL) {};
 
-        ~CircleTool() = default;
-
         virtual std::string_view Icon() const override {return kIcon;};
         virtual std::string_view Name() const override {return kName;};
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
@@ -114,8 +110,6 @@ class ArrowTool : public pp::Tool {
     public:
         ArrowTool(pp::Canvas* cvs)
             :cvs_(cvs), is_drawing_(false), arrow_(NULL) {};
-
-        ~ArrowTool() = default;
 
         virtual std::string_view Icon() const override {return kIcon;};
         virtual std::string_view Name() const override {return kName;};
