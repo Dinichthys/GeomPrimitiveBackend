@@ -229,7 +229,7 @@ bool Penis::OnMouseUp(const dr4::Event::MouseButton &evt) {
     ball2_->SetCenter(center2);
 
     line1_->SetStart(center1 + vec / len * kBallsRadius);
-    line1_->SetEnd(center1 + vec / len * (len - kBallsRadius));
+    line1_->SetEnd(center1 + vec / len * (len - kBallsRadius) - dr4::Vec2f(vec.y, -vec.x) / len * kWidth);
 
     line2_->SetStart(center2 + vec / len * kBallsRadius);
     line2_->SetEnd(center2 + vec / len * (len - kBallsRadius));
@@ -257,7 +257,7 @@ bool Penis::OnMouseMove(const dr4::Event::MouseMove &evt) {
     ball2_->SetCenter(center2);
 
     line1_->SetStart(center1 + vec / len * kBallsRadius);
-    line1_->SetEnd(center1 + vec / len * (len - kBallsRadius));
+    line1_->SetEnd(center1 + vec / len * (len - kBallsRadius) - dr4::Vec2f(vec.y, -vec.x) / len * kWidth);
 
     line2_->SetStart(center2 + vec / len * kBallsRadius);
     line2_->SetEnd(center2 + vec / len * (len - kBallsRadius));
