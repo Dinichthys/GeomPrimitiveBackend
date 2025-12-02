@@ -1,3 +1,6 @@
 [submodule "mipt-ded-zemax"]
 	path = mipt-ded-zemax
 	url = https://github.com/random-username-here/mipt-ded-zemax.git
+[submodule "stb"]
+	path = stb
+	url = https://github.com/nothings/stb.git
