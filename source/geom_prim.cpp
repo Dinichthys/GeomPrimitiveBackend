@@ -309,7 +309,6 @@ bool Text::OnMouseUp(const dr4::Event::MouseButton &evt) {
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     texture_->SetSize(rect_info_.size);
     border_->SetSize(rect_info_.size);
-    text_->SetFontSize(rect_info_.size.y);
 
     selected_ = false;
     printing_ = true;
@@ -339,7 +338,6 @@ bool Text::OnMouseMove(const dr4::Event::MouseMove &evt) {
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     texture_->SetSize(rect_info_.size);
     border_->SetSize(rect_info_.size);
-    text_->SetFontSize(rect_info_.size.y);
 
     return true;
 }
@@ -357,8 +355,10 @@ bool Text::OnKeyDown(const dr4::Event::KeyEvent &evt) {
             cvs_->SetSelectedShape(NULL);
             return true;
         case dr4::KeyCode::KEYCODE_BACKSPACE :
+            str = text_->GetText();
             shift = ((str.length() > 2) && (str[str.length() - 2] == '\n')) ? 2 : 1;
             text_->SetText(str.substr(0, str.length() - shift));
+            texture_->Clear({0, 0, 0, 0});
             return true;
         default :
             return false;
@@ -370,12 +370,18 @@ bool Text::OnText(const dr4::Event::TextEvent &evt) {
         return false;
     }
 
+    if ((strcmp(evt.unicode, "\b") == 0)
+        || (strcmp(evt.unicode, "\n") == 0)) {
+        return false;
+    }
+
     auto str = text_->GetText();
     text_->SetText(str + evt.unicode);
 
-    if (text_->GetBounds().x > rect_info_.pos.x) {
+    if (text_->GetBounds().x > rect_info_.size.x) {
         text_->SetText(str.substr(0, str.length() - strlen(evt.unicode)) + '\n' + evt.unicode);
     }
+    texture_->Clear({0, 0, 0, 0});
 
     return true;
 }
