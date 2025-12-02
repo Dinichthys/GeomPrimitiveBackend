@@ -1,6 +1,7 @@
 #include "geom_prim.hpp"
 
 #include <math.h>
+#include <string.h>
 
 namespace pp {
 
@@ -273,7 +274,6 @@ bool Penis::OnMouseMove(const dr4::Event::MouseMove &evt) {
 
 bool Text::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (selected_) {
-        rect_info_.pos = evt.pos;
         SetPos(evt.pos);
         return true;
     }
@@ -299,15 +299,17 @@ bool Text::OnMouseUp(const dr4::Event::MouseButton &evt) {
         } else {
             rect_info_.pos = {rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y};
         }
-        texture_->SetPos(rect_info_.pos);
+        SetPos(rect_info_.pos);
     } else {
         if (rect_info_.size.y < 0) {
             rect_info_.pos = {rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y};
-            texture_->SetPos(rect_info_.pos);
+            SetPos(rect_info_.pos);
         }
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     texture_->SetSize(rect_info_.size);
+    border_->SetSize(rect_info_.size);
+    text_->SetFontSize(rect_info_.size.y);
 
     selected_ = false;
     printing_ = true;
@@ -327,15 +329,17 @@ bool Text::OnMouseMove(const dr4::Event::MouseMove &evt) {
         } else {
             rect_info_.pos = {rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y};
         }
-        texture_->SetPos(rect_info_.pos);
+        SetPos(rect_info_.pos);
     } else {
         if (rect_info_.size.y < 0) {
             rect_info_.pos = {rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y};
-            texture_->SetPos(rect_info_.pos);
+            SetPos(rect_info_.pos);
         }
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     texture_->SetSize(rect_info_.size);
+    border_->SetSize(rect_info_.size);
+    text_->SetFontSize(rect_info_.size.y);
 
     return true;
 }
@@ -345,13 +349,19 @@ bool Text::OnKeyDown(const dr4::Event::KeyEvent &evt) {
         return false;
     }
 
+    auto str = text_->GetText();
+    size_t shift = 0;
     switch(evt.sym) {
         case dr4::KeyCode::KEYCODE_ENTER :
             printing_ = false;
             cvs_->SetSelectedShape(NULL);
             return true;
-        default:
+        case dr4::KeyCode::KEYCODE_BACKSPACE :
+            shift = ((str.length() > 2) && (str[str.length() - 2] == '\n')) ? 2 : 1;
+            text_->SetText(str.substr(0, str.length() - shift));
             return true;
+        default :
+            return false;
     }
 }
 
@@ -360,7 +370,12 @@ bool Text::OnText(const dr4::Event::TextEvent &evt) {
         return false;
     }
 
-    text_->SetText(text_->GetText() + evt.unicode);
+    auto str = text_->GetText();
+    text_->SetText(str + evt.unicode);
+
+    if (text_->GetBounds().x > rect_info_.pos.x) {
+        text_->SetText(str.substr(0, str.length() - strlen(evt.unicode)) + '\n' + evt.unicode);
+    }
 
     return true;
 }

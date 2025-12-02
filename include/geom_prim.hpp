@@ -491,6 +491,10 @@ class Text : public pp::Shape {
             delete texture_;
             delete text_;
 
+            if (printing_) {
+                cvs_->GetWindow()->StopTextInput();
+            }
+
             delete border_;
         }
 
@@ -511,14 +515,14 @@ class Text : public pp::Shape {
             texture_->DrawOn(texture);
 
             if (selected_ || printing_) {
-                border_->SetPos(texture_->GetPos());
-                border_->SetSize(texture_->GetSize());
                 border_->DrawOn(texture);
             }
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
             texture_->SetPos(pos);
+            rect_info_.pos = pos;
+            border_->SetPos(pos);
         };
 
         virtual dr4::Vec2f GetPos() const override {
