@@ -43,7 +43,6 @@ bool ImageTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 
 bool Image::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (selected_) {
-        rect_info_.pos = evt.pos;
         image_->SetPos(rect_info_.pos);
 
         return true;
@@ -77,15 +76,16 @@ bool Image::OnMouseUp(const dr4::Event::MouseButton &evt) {
         } else {
             rect_info_.pos = {rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y};
         }
-        image_->SetPos(rect_info_.pos);
+        SetPos(rect_info_.pos);
     } else {
         if (rect_info_.size.y < 0) {
             rect_info_.pos = {rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y};
-            image_->SetPos(rect_info_.pos);
+            SetPos(rect_info_.pos);
         }
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     image_->SetSize(rect_info_.size);
+    border_->SetSize(rect_info_.size);
 
     cvs_->SetSelectedShape(NULL);
     selected_ = false;
@@ -103,17 +103,18 @@ bool Image::OnMouseMove(const dr4::Event::MouseMove &evt) {
     rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
-            image_->SetPos(rect_info_.pos + rect_info_.size);
+            SetPos(rect_info_.pos + rect_info_.size);
         } else {
-            image_->SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
+            SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
         }
     } else {
         if (rect_info_.size.y < 0) {
-            image_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
+            SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
         }
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     image_->SetSize(rect_info_.size);
+    border_->SetSize(rect_info_.size);
 
     return true;
 }
