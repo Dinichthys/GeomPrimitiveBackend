@@ -124,9 +124,9 @@ bool Image::OnMouseMove(const dr4::Event::MouseMove &evt) {
     return true;
 }
 
-void Image::SetPicture() {
+void Image::SetPicture(const std::string& file_name) {
     int n = 0, width = 0, height = 0;
-    unsigned char* data = stbi_load(kImageFileName.c_str(), &width, &height, &n, kRGBASizeEncoding);
+    unsigned char* data = stbi_load(file_name.c_str(), &width, &height, &n, kRGBASizeEncoding);
     if (data == nullptr) {
         uploaded_ = false;
         return;
