@@ -84,6 +84,7 @@ bool Image::OnMouseUp(const dr4::Event::MouseButton &evt) {
             border_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
         }
     }
+    rect_info_.pos = image_->GetPos();
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     image_->SetSize(rect_info_.size);
     border_->SetSize(rect_info_.size);
