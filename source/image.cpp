@@ -72,15 +72,16 @@ bool Image::OnMouseUp(const dr4::Event::MouseButton &evt) {
     rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
-            rect_info_.pos = rect_info_.pos + rect_info_.size;
+            image_->SetPos(rect_info_.pos + rect_info_.size);
+            border_->SetPos(rect_info_.pos + rect_info_.size);
         } else {
-            rect_info_.pos = {rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y};
+            image_->SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
+            border_->SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
         }
-        SetPos(rect_info_.pos);
     } else {
         if (rect_info_.size.y < 0) {
-            rect_info_.pos = {rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y};
-            SetPos(rect_info_.pos);
+            image_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
+            border_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
         }
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
@@ -103,13 +104,16 @@ bool Image::OnMouseMove(const dr4::Event::MouseMove &evt) {
     rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
-            SetPos(rect_info_.pos + rect_info_.size);
+            image_->SetPos(rect_info_.pos + rect_info_.size);
+            border_->SetPos(rect_info_.pos + rect_info_.size);
         } else {
-            SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
+            image_->SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
+            border_->SetPos({rect_info_.pos.x + rect_info_.size.x, rect_info_.pos.y});
         }
     } else {
         if (rect_info_.size.y < 0) {
-            SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
+            image_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
+            border_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
         }
     }
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
