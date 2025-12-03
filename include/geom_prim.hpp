@@ -520,11 +520,9 @@ class Text : public pp::Shape {
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
-            if ((rect_info_.pos.x < kEpsilon) && (rect_info_.pos.y < kEpsilon)) {
-                texture_->SetPos(pos);
-                rect_info_.pos = pos;
-                border_->SetPos(pos);
-            }
+            texture_->SetPos(pos);
+            rect_info_.pos = pos;
+            border_->SetPos(pos);
         };
 
         virtual dr4::Vec2f GetPos() const override {
