@@ -16,11 +16,15 @@
 
 namespace pp {
 
+static const std::string kPlsEnterFileName = "Enter file name:";
 static const std::string kEnterFileName = "image.png";
-static const dr4::Vec2f kEnterFileNameSize = {300, 30};
+static const dr4::Vec2f kEnterFileNameSize = {300, 40};
 static const size_t kRGBASizeEncoding = 4;
 static const dr4::Color kDefaultColor = {0, 0, 0};
 static const dr4::Color kBaseFillColorTextField = {150, 150, 150};
+
+static const float kTitleFontSize = 10;
+static const float kTitleHeight = 12;
 
 class EnterFileName : public pp::Shape {
     private:
@@ -28,8 +32,10 @@ class EnterFileName : public pp::Shape {
 
         dr4::Rect2f rect_info_;
 
+        dr4::Text* title_;
         dr4::Text* text_;
         dr4::Rectangle* rect_;
+        dr4::Rectangle* border_;
         dr4::Texture* texture_;
 
         const float kBorderThickness = 2;
@@ -40,14 +46,29 @@ class EnterFileName : public pp::Shape {
 
             text_ = cvs->GetWindow()->CreateText();
             text_->SetFontSize(kFontSize);
-            text_->SetPos({});
+            text_->SetPos({0, kTitleHeight});
             text_->SetColor(cvs->GetControlsTheme().textColor);
-            dr4::Font* font = cvs->GetWindow()->CreateFont();
+
+            title_ = cvs->GetWindow()->CreateText();
+            title_->SetFontSize(kTitleFontSize);
+            title_->SetPos({});
+            title_->SetColor(cvs->GetControlsTheme().textColor);
+
+            const dr4::Font* font = cvs->GetWindow()->GetDefaultFont();
             if (font != NULL) {
-                font->LoadFromFile(kFontFileName);
                 text_->SetFont(font);
+                title_->SetFont(font);
+            } else {
+                dr4::Font* font = cvs->GetWindow()->CreateFont();
+                if (font != NULL) {
+                    font->LoadFromFile(kFontFileName);
+                    text_->SetFont(font);
+                    title_->SetFont(font);
+                }
             }
+
             text_->SetText(kEnterFileName);
+            title_->SetText(kPlsEnterFileName);
 
             texture_ = cvs->GetWindow()->CreateTexture();
             texture_->SetPos({});
@@ -56,11 +77,18 @@ class EnterFileName : public pp::Shape {
             rect_ = cvs->GetWindow()->CreateRectangle();
             rect_->SetBorderThickness(kBorderThickness);
             rect_->SetBorderColor(cvs->GetControlsTheme().shapeBorderColor);
-            rect_->SetFillColor(cvs->GetControlsTheme().shapeFillColor);
+            rect_->SetFillColor(kBaseFillColorTextField);
             rect_->SetPos({});
             rect_->SetSize(kEnterFileNameSize);
             rect_info_.pos = {};
             rect_info_.size = kEnterFileNameSize;
+
+            border_ = cvs->GetWindow()->CreateRectangle();
+            border_->SetBorderThickness(kBorderThickness);
+            border_->SetBorderColor(cvs->GetControlsTheme().shapeBorderColor);
+            border_->SetFillColor(kBaseFillColorTextField);
+            border_->SetPos({});
+            border_->SetSize({kEnterFileNameSize.x, kEnterFileNameSize.y - kTitleHeight});
         };
 
         ~EnterFileName() {
@@ -70,10 +98,16 @@ class EnterFileName : public pp::Shape {
         };
 
         virtual void DrawOn(dr4::Texture& texture) const override {
-            rect_->SetPos((texture.GetSize() - rect_info_.size) / 2);
-            texture_->SetPos((texture.GetSize() - rect_info_.size) / 2);
+            dr4::Vec2f txtr_size = texture.GetSize();
+
+            rect_->SetPos((txtr_size - rect_info_.size) / 2);
+            border_->SetPos((txtr_size - rect_info_.size) / 2 + dr4::Vec2f{0, kTitleHeight});
+            texture_->SetPos((txtr_size - rect_info_.size) / 2);
+
             rect_->DrawOn(texture);
+            border_->DrawOn(texture);
             text_->DrawOn(*texture_);
+            title_->DrawOn(*texture_);
             texture_->DrawOn(texture);
         };
 
@@ -94,8 +128,15 @@ class EnterFileName : public pp::Shape {
                     cvs_->SetSelectedShape(NULL);
                     return true;
                 case dr4::KeyCode::KEYCODE_BACKSPACE :
-                    text_->SetText(text_->GetText().substr(0, str.length() - 1));
-                    texture_->Clear({0, 0, 0, 0});
+                    if (str.length() > 0) {
+                        float old_width = text_->GetBounds().x;
+                        text_->SetText(text_->GetText().substr(0, str.length() - 1));
+                        if (old_width > rect_info_.size.x) {
+                            text_->SetPos({rect_info_.pos.x + rect_info_.size.x - text_->GetBounds().x,
+                                           rect_info_.pos.y});
+                        }
+                        texture_->Clear({0, 0, 0, 0});
+                    }
                     return true;
                 default :
                     return false;
@@ -111,6 +152,11 @@ class EnterFileName : public pp::Shape {
             auto str = text_->GetText();
             text_->SetText(str + evt.unicode);
             texture_->Clear({0, 0, 0, 0});
+
+            float width = text_->GetBounds().x;
+            if (width > rect_info_.size.x) {
+                text_->SetPos({rect_info_.pos.x + rect_info_.size.x - width, rect_info_.pos.y});
+            }
 
             return true;
         }

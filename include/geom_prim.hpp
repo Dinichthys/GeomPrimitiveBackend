@@ -470,10 +470,16 @@ class Text : public pp::Shape {
             texture_ = cvs->GetWindow()->CreateTexture();
 
             text_ = cvs->GetWindow()->CreateText();
-            dr4::Font* font_ = cvs->GetWindow()->CreateFont();
-            if (font_ != NULL) {
-                font_->LoadFromFile(kFontFileName);
-                text_->SetFont(font_);
+
+            const dr4::Font* font = cvs->GetWindow()->GetDefaultFont();
+            if (font != NULL) {
+                text_->SetFont(font);
+            } else {
+                dr4::Font* font = cvs->GetWindow()->CreateFont();
+                if (font != NULL) {
+                    font->LoadFromFile(kFontFileName);
+                    text_->SetFont(font);
+                }
             }
             text_->SetText("");
             text_->SetPos({0, 0});
