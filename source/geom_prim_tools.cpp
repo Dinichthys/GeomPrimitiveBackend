@@ -8,6 +8,8 @@ bool RectangleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != rect_)) {
         OnStart();
+        rect_->SetPos(evt.pos);
+        rect_->OnSelect();
         return true;
     }
 
@@ -43,6 +45,8 @@ bool CircleTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != circle_)) {
         OnStart();
+        circle_->SetPos(evt.pos);
+        circle_->OnSelect();
         return true;
     }
 
@@ -78,6 +82,8 @@ bool ArrowTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != arrow_)) {
         OnStart();
+        arrow_->SetPos(evt.pos);
+        arrow_->OnSelect();
         return true;
     }
 
@@ -113,6 +119,8 @@ bool PenisTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != penis_)) {
         OnStart();
+        penis_->SetPos(evt.pos);
+        penis_->OnSelect();
         return true;
     }
 
@@ -148,6 +156,8 @@ bool TextTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != text_)) {
         OnStart();
+        text_->SetPos(evt.pos);
+        text_->OnSelect();
         return true;
     }
 
