@@ -29,6 +29,7 @@ class PrintScreen : public pp::Shape {
         const float kBorderThickness = 5;
 
         bool started_;
+        bool is_drawing_;
 
         dr4::Rect2f rect_info_;
 
@@ -53,6 +54,7 @@ class PrintScreen : public pp::Shape {
             background_->SetZero(-rect_info_.pos);
 
             started_ = false;
+            is_drawing_ = false;
         };
 
         ~PrintScreen() {

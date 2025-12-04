@@ -43,10 +43,15 @@ bool PrintScreenTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 
 bool PrintScreen::OnMouseDown(const dr4::Event::MouseButton &evt) {
     SetPos(evt.pos);
+    is_drawing_ = true;
     return true;
 }
 
 bool PrintScreen::OnMouseUp(const dr4::Event::MouseButton &evt) {
+    if (!is_drawing_) {
+        return false;
+    }
+
     rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
@@ -63,12 +68,16 @@ bool PrintScreen::OnMouseUp(const dr4::Event::MouseButton &evt) {
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     border_->SetSize(rect_info_.size);
 
-    OnDeselect();
+    tool_->SwitchToFileName();
 
     return true;
 }
 
 bool PrintScreen::OnMouseMove(const dr4::Event::MouseMove &evt) {
+    if (!is_drawing) {
+        return false;
+    }
+
     rect_info_.size = evt.pos - rect_info_.pos;
     if (rect_info_.size.x < 0) {
         if (rect_info_.size.y < 0) {
@@ -123,7 +132,6 @@ void PrintScreen::OnSelect() {
 void PrintScreen::OnDeselect() {
     if (cvs_->GetSelectedShape() == this) {
         cvs_->SetSelectedShape(NULL);
-        tool_->SwitchToFileName();
     }
 }
 
