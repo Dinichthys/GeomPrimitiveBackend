@@ -53,7 +53,7 @@ class Rectangle : public pp::Shape {
             if (selected_) {
                 rect_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
             } else {
-                rect_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+                rect_->SetBorderColor(cvs_->GetControlsTheme().shapeBorderColor);
             }
 
             rect_->DrawOn(texture);
@@ -76,8 +76,8 @@ class Rectangle : public pp::Shape {
         virtual void OnDeselect() override {selected_ = false;};
 
         void SetTheme(const pp::ControlsTheme& theme) {
-            rect_->SetFillColor(theme.shapeColor);
-            rect_->SetBorderColor(theme.lineColor);
+            rect_->SetFillColor(theme.shapeFillColor);
+            rect_->SetBorderColor(theme.shapeBorderColor);
             resize_dot_->SetFillColor(theme.handleHoverColor);
         };
 };
@@ -121,7 +121,7 @@ class Circle : public pp::Shape {
             if (selected_) {
                 circle_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
             } else {
-                circle_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+                circle_->SetBorderColor(cvs_->GetControlsTheme().shapeBorderColor);
             }
 
             circle_->DrawOn(texture);
@@ -147,8 +147,8 @@ class Circle : public pp::Shape {
         virtual void OnDeselect() override {selected_ = false;};
 
         void SetTheme(const pp::ControlsTheme& theme) {
-            circle_->SetFillColor(theme.shapeColor);
-            circle_->SetBorderColor(theme.lineColor);
+            circle_->SetFillColor(theme.shapeFillColor);
+            circle_->SetBorderColor(theme.shapeBorderColor);
             border_->SetBorderColor(theme.handleColor);
         };
 };
@@ -211,9 +211,9 @@ class Arrow : public pp::Shape {
                 line2_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
                 line3_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
             } else {
-                line1_->SetColor(cvs_->GetControlsTheme().lineColor);
-                line2_->SetColor(cvs_->GetControlsTheme().lineColor);
-                line3_->SetColor(cvs_->GetControlsTheme().lineColor);
+                line1_->SetColor(cvs_->GetControlsTheme().shapeBorderColor);
+                line2_->SetColor(cvs_->GetControlsTheme().shapeBorderColor);
+                line3_->SetColor(cvs_->GetControlsTheme().shapeBorderColor);
             }
 
             line1_->DrawOn(texture);
@@ -270,9 +270,9 @@ class Arrow : public pp::Shape {
         virtual void OnDeselect() override {selected_ = false;};
 
         void SetTheme(const pp::ControlsTheme& theme) {
-            line1_->SetColor(theme.lineColor);
-            line2_->SetColor(theme.lineColor);
-            line3_->SetColor(theme.lineColor);
+            line1_->SetColor(theme.shapeBorderColor);
+            line2_->SetColor(theme.shapeBorderColor);
+            line3_->SetColor(theme.shapeBorderColor);
 
             border_->SetBorderColor(theme.handleColor);
         };
@@ -380,11 +380,11 @@ class Penis : public pp::Shape {
                 ball2_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
                 ending_->SetBorderColor(cvs_->GetControlsTheme().handleActiveColor);
             } else {
-                line1_->SetColor(cvs_->GetControlsTheme().lineColor);
-                line2_->SetColor(cvs_->GetControlsTheme().lineColor);
-                ball1_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
-                ball2_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
-                ending_->SetBorderColor(cvs_->GetControlsTheme().lineColor);
+                line1_->SetColor(cvs_->GetControlsTheme().shapeBorderColor);
+                line2_->SetColor(cvs_->GetControlsTheme().shapeBorderColor);
+                ball1_->SetBorderColor(cvs_->GetControlsTheme().shapeBorderColor);
+                ball2_->SetBorderColor(cvs_->GetControlsTheme().shapeBorderColor);
+                ending_->SetBorderColor(cvs_->GetControlsTheme().shapeBorderColor);
             }
 
             line1_->DrawOn(texture);
@@ -437,11 +437,11 @@ class Penis : public pp::Shape {
         virtual void OnDeselect() override {selected_ = false;};
 
         void SetTheme(const pp::ControlsTheme& theme) {
-            line1_->SetColor(theme.lineColor);
-            line2_->SetColor(theme.lineColor);
-            ball1_->SetBorderColor(theme.lineColor);
-            ball2_->SetBorderColor(theme.lineColor);
-            ending_->SetBorderColor(theme.lineColor);
+            line1_->SetColor(theme.shapeBorderColor);
+            line2_->SetColor(theme.shapeBorderColor);
+            ball1_->SetBorderColor(theme.shapeBorderColor);
+            ball2_->SetBorderColor(theme.shapeBorderColor);
+            ending_->SetBorderColor(theme.shapeBorderColor);
 
             border_->SetBorderColor(theme.handleColor);
         };
@@ -508,7 +508,7 @@ class Text : public pp::Shape {
             if (selected_) {
                 text_->SetColor(cvs_->GetControlsTheme().handleActiveColor);
             } else {
-                text_->SetColor(cvs_->GetControlsTheme().lineColor);
+                text_->SetColor(cvs_->GetControlsTheme().textColor);
             }
 
             text_->DrawOn(*texture_);
@@ -533,7 +533,7 @@ class Text : public pp::Shape {
         virtual void OnDeselect() override {selected_ = false;};
 
         void SetTheme(const pp::ControlsTheme& theme) {
-            text_->SetColor(theme.lineColor);
+            text_->SetColor(theme.textColor);
 
             border_->SetBorderColor(theme.handleColor);
         };

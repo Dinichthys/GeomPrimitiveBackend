@@ -16,13 +16,13 @@
 
 namespace pp {
 
-static const std::string kImageFileName = "image.png";
-static const dr4::Vec2f kImageFileNameSize = {300, 30};
+static const std::string kEnterFileName = "image.png";
+static const dr4::Vec2f kEnterFileNameSize = {300, 30};
 static const size_t kRGBASizeEncoding = 4;
 static const dr4::Color kDefaultColor = {0, 0, 0};
 static const dr4::Color kBaseFillColorTextField = {150, 150, 150};
 
-class ImageFileName : public pp::Shape {
+class EnterFileName : public pp::Shape {
     private:
         pp::Canvas* cvs_;
 
@@ -35,41 +35,43 @@ class ImageFileName : public pp::Shape {
         const float kBorderThickness = 2;
 
     public:
-        ImageFileName(pp::Canvas* cvs) {
+        EnterFileName(pp::Canvas* cvs) {
             cvs_ = cvs;
 
             text_ = cvs->GetWindow()->CreateText();
             text_->SetFontSize(kFontSize);
             text_->SetPos({});
-            text_->SetColor(cvs->GetControlsTheme().lineColor);
+            text_->SetColor(cvs->GetControlsTheme().textColor);
             dr4::Font* font = cvs->GetWindow()->CreateFont();
             if (font != NULL) {
                 font->LoadFromFile(kFontFileName);
                 text_->SetFont(font);
             }
-            text_->SetText(kImageFileName);
+            text_->SetText(kEnterFileName);
 
             texture_ = cvs->GetWindow()->CreateTexture();
             texture_->SetPos({});
-            texture_->SetSize(kImageFileNameSize);
+            texture_->SetSize(kEnterFileNameSize);
 
             rect_ = cvs->GetWindow()->CreateRectangle();
             rect_->SetBorderThickness(kBorderThickness);
-            rect_->SetBorderColor(cvs->GetControlsTheme().lineColor);
-            rect_->SetFillColor(kBaseFillColorTextField);
+            rect_->SetBorderColor(cvs->GetControlsTheme().shapeBorderColor);
+            rect_->SetFillColor(cvs->GetControlsTheme().shapeFillColor);
             rect_->SetPos({});
-            rect_->SetSize(kImageFileNameSize);
+            rect_->SetSize(kEnterFileNameSize);
             rect_info_.pos = {};
-            rect_info_.size = kImageFileNameSize;
+            rect_info_.size = kEnterFileNameSize;
         };
 
-        ~ImageFileName() {
+        ~EnterFileName() {
             delete rect_;
             delete text_;
             delete texture_;
         };
 
         virtual void DrawOn(dr4::Texture& texture) const override {
+            rect_->SetPos((texture.GetSize() - rect_info_.size) / 2);
+            texture_->SetPos((texture.GetSize() - rect_info_.size) / 2);
             rect_->DrawOn(texture);
             text_->DrawOn(*texture_);
             texture_->DrawOn(texture);
@@ -142,7 +144,7 @@ class Image : public pp::Shape {
             image_->SetPos({});
 
             border_ = cvs->GetWindow()->CreateRectangle();
-            border_->SetBorderColor(kBorderColor);
+            border_->SetBorderColor(cvs->GetControlsTheme().handleColor);
             border_->SetBorderThickness(kBorderThickness);
             border_->SetFillColor({0, 0, 0, 0});
             rect_info_ = {};
@@ -169,10 +171,6 @@ class Image : public pp::Shape {
         virtual void DrawOn(dr4::Texture& texture) const override {
             if (!started_) {
                 return;
-            }
-
-            if (selected_) {
-                border_->SetBorderColor(cvs_->GetControlsTheme().handleColor);
             }
 
             ImageDataRedraw();
@@ -205,7 +203,7 @@ class Image : public pp::Shape {
         };
 
         void SetTheme(const pp::ControlsTheme& theme) {
-            border_->SetBorderColor(theme.lineColor);
+            border_->SetBorderColor(theme.handleColor);
         };
 
     private:
@@ -223,9 +221,9 @@ class ImageTool : public pp::Tool {
 
         Image* image_;
 
-        ImageFileName* file_name_shape_;
+        EnterFileName* file_name_shape_;
 
-        std::string file_name_ = kImageFileName;
+        std::string file_name_ = kEnterFileName;
 
         const std::string kIcon = "I";
         const std::string kName = "ImageTool";
@@ -239,7 +237,6 @@ class ImageTool : public pp::Tool {
         virtual bool IsCurrentlyDrawing() const override {return is_drawing_;};
 
         virtual void OnStart() override {
-            fprintf(stderr, "OnStart\n");
             if (entered_) {
                 is_drawing_ = true;
                 image_ = new Image(cvs_, file_name_);
@@ -247,7 +244,7 @@ class ImageTool : public pp::Tool {
                 cvs_->AddShape(image_);
                 cvs_->SetSelectedShape(image_);
             } else {
-                file_name_shape_ = new ImageFileName(cvs_);
+                file_name_shape_ = new EnterFileName(cvs_);
                 cvs_->AddShape(file_name_shape_);
                 cvs_->SetSelectedShape(file_name_shape_);
             }

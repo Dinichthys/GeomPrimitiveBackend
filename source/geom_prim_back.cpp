@@ -1,6 +1,7 @@
 #include "geom_prim_back.hpp"
 #include "geom_prim_tools.hpp"
 #include "image.hpp"
+#include "print_screen.hpp"
 
 #include "cum/manager.hpp"
 
@@ -13,6 +14,7 @@ std::vector<std::unique_ptr<::pp::Tool>> GeomPrimBack::CreateTools(pp::Canvas *c
     res.emplace_back(std::make_unique<pp::PenisTool>(cvs));
     res.emplace_back(std::make_unique<pp::TextTool>(cvs));
     res.emplace_back(std::make_unique<pp::ImageTool>(cvs));
+    res.emplace_back(std::make_unique<pp::PrintScreenTool>(cvs));
 
     return res;
 }
