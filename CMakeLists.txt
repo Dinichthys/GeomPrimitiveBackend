@@ -7,6 +7,7 @@ add_library (${PROJECT_NAME} SHARED
     source/geom_prim_tools.cpp
 
     source/image.cpp
+    source/print_screen.cpp
 )
 
 target_include_directories (${PROJECT_NAME}
