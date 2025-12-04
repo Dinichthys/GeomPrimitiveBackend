@@ -133,7 +133,7 @@ class EnterFileName : public pp::Shape {
                         text_->SetText(text_->GetText().substr(0, str.length() - 1));
                         if (old_width > rect_info_.size.x) {
                             text_->SetPos({rect_info_.pos.x + rect_info_.size.x - text_->GetBounds().x,
-                                           rect_info_.pos.y});
+                                           rect_info_.pos.y + kTitleFontSize});
                         }
                         texture_->Clear({0, 0, 0, 0});
                     }
@@ -155,7 +155,7 @@ class EnterFileName : public pp::Shape {
 
             float width = text_->GetBounds().x;
             if (width > rect_info_.size.x) {
-                text_->SetPos({rect_info_.pos.x + rect_info_.size.x - width, rect_info_.pos.y});
+                text_->SetPos({rect_info_.pos.x + rect_info_.size.x - width, rect_info_.pos.y + kTitleFontSize});
             }
 
             return true;
