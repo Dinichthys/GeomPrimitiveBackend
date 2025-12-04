@@ -71,7 +71,10 @@ class PrintScreen : public pp::Shape {
             }
 
             border_->DrawOn(texture);
+            dr4::Vec2f pos = texture.GetPos();
+            texture.SetPos({});
             texture.DrawOn(*background_);
+            texture.SetPos(pos);
         };
 
         virtual void SetPos(dr4::Vec2f pos) override {
@@ -155,6 +158,7 @@ class PrintScreenTool : public pp::Tool {
         void SwitchToFileName() {
             is_drawing_ = false;
             entered_ = true;
+            OnStart();
         }
 
         virtual bool OnMouseDown(const dr4::Event::MouseButton &evt) override;

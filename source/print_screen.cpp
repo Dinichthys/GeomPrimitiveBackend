@@ -1,7 +1,7 @@
 #include "print_screen.hpp"
 
 extern "C" {
-    #define STB_print_screen_WRITE_IMPLEMENTATION
+    #define STB_IMAGE_WRITE_IMPLEMENTATION
     #include "stb/stb_image_write.h"
 }
 
@@ -64,9 +64,11 @@ bool PrintScreen::OnMouseUp(const dr4::Event::MouseButton &evt) {
             border_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
         }
     }
+    background_->SetZero(-border_->GetPos());
     rect_info_.pos = border_->GetPos();
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     border_->SetSize(rect_info_.size);
+    background_->SetSize(rect_info_.size);
 
     tool_->SwitchToFileName();
 
@@ -74,7 +76,7 @@ bool PrintScreen::OnMouseUp(const dr4::Event::MouseButton &evt) {
 }
 
 bool PrintScreen::OnMouseMove(const dr4::Event::MouseMove &evt) {
-    if (!is_drawing) {
+    if (!is_drawing_) {
         return false;
     }
 
@@ -90,8 +92,10 @@ bool PrintScreen::OnMouseMove(const dr4::Event::MouseMove &evt) {
             border_->SetPos({rect_info_.pos.x, rect_info_.pos.y + rect_info_.size.y});
         }
     }
+    background_->SetZero(-border_->GetPos());
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     border_->SetSize(rect_info_.size);
+    background_->SetSize(rect_info_.size);
 
     started_ = true;
 
