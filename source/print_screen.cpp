@@ -84,6 +84,8 @@ bool PrintScreen::OnMouseMove(const dr4::Event::MouseMove &evt) {
     rect_info_.size = {abs(rect_info_.size.x), abs(rect_info_.size.y)};
     border_->SetSize(rect_info_.size);
 
+    started_ = true;
+
     return true;
 }
 

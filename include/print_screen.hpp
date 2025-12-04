@@ -28,6 +28,8 @@ class PrintScreen : public pp::Shape {
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
         const float kBorderThickness = 5;
 
+        bool started_;
+
         dr4::Rect2f rect_info_;
 
         dr4::Rectangle* border_;
@@ -49,7 +51,8 @@ class PrintScreen : public pp::Shape {
             background_ = cvs->GetWindow()->CreateTexture();
             background_->SetPos({});
             background_->SetZero(-rect_info_.pos);
-            background_->SetSize(rect_info_.size);
+
+            started_ = false;
         };
 
         ~PrintScreen() {
@@ -61,6 +64,10 @@ class PrintScreen : public pp::Shape {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
 
         virtual void DrawOn(dr4::Texture& texture) const override {
+            if (!started_) {
+                return;
+            }
+
             border_->DrawOn(texture);
             texture.DrawOn(*background_);
         };
