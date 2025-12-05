@@ -144,11 +144,9 @@ class PrintScreenTool : public pp::Tool {
         };
         virtual void OnEnd() override {
             if (file_name_shape_ != NULL) {
-                file_name_shape_->OnDeselect();
                 cvs_->DelShape(file_name_shape_);
             }
             if (print_screen_ != NULL) {
-                print_screen_->OnDeselect();
                 cvs_->DelShape(print_screen_);
             }
             print_screen_ = NULL;
