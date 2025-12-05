@@ -87,14 +87,8 @@ class PrintScreen : public pp::Shape {
             return rect_info_.pos;
         };
 
-        void PrintScreen::OnSelect() {
-            cvs_->SetSelectedShape(this);
-        };
-        void PrintScreen::OnDeselect() {
-            if (cvs_->GetSelectedShape() == this) {
-                cvs_->SetSelectedShape(NULL);
-            }
-        };
+        void OnSelect() {};
+        void OnDeselect() {};
 
         void SetTheme(const pp::ControlsTheme& theme) {
             border_->SetBorderColor(theme.handleColor);
