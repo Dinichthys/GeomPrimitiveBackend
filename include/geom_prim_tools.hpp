@@ -32,7 +32,6 @@ class RectangleTool : public pp::Tool {
             rect_ = new Rectangle(cvs_->GetWindow()->CreateRectangle(), cvs_);
             rect_->SetTheme(cvs_->GetControlsTheme());
             cvs_->AddShape(rect_);
-            cvs_->SetSelectedShape(rect_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
@@ -76,7 +75,6 @@ class CircleTool : public pp::Tool {
             circle_ = new Circle(cvs_->GetWindow()->CreateCircle(), cvs_);
             circle_->SetTheme(cvs_->GetControlsTheme());
             cvs_->AddShape(circle_);
-            cvs_->SetSelectedShape(circle_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
@@ -122,7 +120,6 @@ class ArrowTool : public pp::Tool {
                                cvs_->GetWindow()->CreateLine(), cvs_);
             arrow_->SetTheme(cvs_->GetControlsTheme());
             cvs_->AddShape(arrow_);
-            cvs_->SetSelectedShape(arrow_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
@@ -166,7 +163,6 @@ class PenisTool : public pp::Tool {
             penis_ = new Penis(cvs_);
             penis_->SetTheme(cvs_->GetControlsTheme());
             cvs_->AddShape(penis_);
-            cvs_->SetSelectedShape(penis_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {

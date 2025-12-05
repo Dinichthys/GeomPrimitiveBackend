@@ -171,6 +171,7 @@ class Image : public pp::Shape {
         bool selected_;
         bool uploaded_;
         bool started_;
+        bool is_drawing_;
 
         const dr4::Color kBorderColor = {dr4::Color::ColorMaxValue, 0, 0};
         const float kBorderThickness = 5;
@@ -203,6 +204,7 @@ class Image : public pp::Shape {
             image_->SetSize(data_size_);
 
             started_ = false;
+            is_drawing_ = false;
         };
 
         ~Image() {
@@ -323,7 +325,10 @@ class ImageTool : public pp::Tool {
                     OnStart();
                     return true;
                 default :
-                    return file_name_shape_->OnKeyDown(evt);
+                    if (file_name_shape_) {
+                        return file_name_shape_->OnKeyDown(evt);
+                    }
+                    return false;
             }
         }
 
@@ -332,7 +337,10 @@ class ImageTool : public pp::Tool {
                 return false;
             }
 
-            return file_name_shape_->OnText(evt);
+            if (file_name_shape_) {
+                return file_name_shape_->OnText(evt);
+            }
+            return false;
         }
 };
 

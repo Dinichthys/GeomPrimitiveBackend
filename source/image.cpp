@@ -42,7 +42,7 @@ bool ImageTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 bool Image::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (selected_) {
         image_->SetPos(evt.pos);
-
+        is_drawing_ = true;
         return true;
     }
 
@@ -63,7 +63,7 @@ bool Image::OnMouseDown(const dr4::Event::MouseButton &evt) {
 }
 
 bool Image::OnMouseUp(const dr4::Event::MouseButton &evt) {
-    if (!selected_) {
+    if (!selected_ || !is_drawing_) {
         return false;
     }
 
@@ -94,7 +94,7 @@ bool Image::OnMouseUp(const dr4::Event::MouseButton &evt) {
 }
 
 bool Image::OnMouseMove(const dr4::Event::MouseMove &evt) {
-    if (!selected_) {
+    if (!selected_ || !is_drawing_) {
         return false;
     }
 
