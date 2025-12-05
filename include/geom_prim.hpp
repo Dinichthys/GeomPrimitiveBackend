@@ -525,6 +525,7 @@ class Text : public pp::Shape {
         virtual bool OnText(const dr4::Event::TextEvent &) override;
         virtual bool OnIdle(const IdleEvent &) override {
             blink_ = !blink_;
+            return true;
         };
 
         virtual void DrawOn(dr4::Texture& texture) const override {

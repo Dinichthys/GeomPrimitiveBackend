@@ -280,7 +280,6 @@ class ImageTool : public pp::Tool {
 
         virtual void OnStart() override {
             if (entered_) {
-                is_drawing_ = true;
                 image_ = new Image(cvs_, file_name_);
                 image_->SetTheme(cvs_->GetControlsTheme());
                 cvs_->AddShape(image_);

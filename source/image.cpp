@@ -16,8 +16,6 @@ bool ImageTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
 
     is_drawing_ = true;
     image_->SetPos(evt.pos);
-    image_->OnSelect();
-    image_->OnMouseDown(evt);
     return true;
 }
 
@@ -43,7 +41,7 @@ bool ImageTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 
 bool Image::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (selected_) {
-        image_->SetPos(rect_info_.pos);
+        image_->SetPos(evt.pos);
 
         return true;
     }
