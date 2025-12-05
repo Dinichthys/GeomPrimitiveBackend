@@ -104,6 +104,9 @@ bool PrintScreen::OnMouseMove(const dr4::Event::MouseMove &evt) {
 
 void PrintScreen::SavePicture(const std::string& file_name) {
     dr4::Image* image = background_->GetImage();
+    if (!image) {
+        return;
+    }
 
     unsigned char* data = (unsigned char*)calloc(rect_info_.size.x * rect_info_.size.y * kRGBASizeEncoding,
                                                  sizeof(unsigned char));
