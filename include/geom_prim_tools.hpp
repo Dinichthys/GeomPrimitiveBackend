@@ -16,7 +16,7 @@ class RectangleTool : public pp::Tool {
 
         Rectangle* rect_;
 
-        const std::string kIcon = u8"󰗆";
+        const std::string kIcon = "R";
         const std::string kName = "RectangleTool";
 
     public:
