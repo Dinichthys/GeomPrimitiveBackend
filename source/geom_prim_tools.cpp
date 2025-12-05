@@ -200,8 +200,10 @@ bool TextTool::OnKeyDown(const dr4::Event::KeyEvent &evt) {
         OnEnd();
         cvs_->GetWindow()->StopTextInput();
         is_printing_ = false;
+        return true;
     }
-    return true;
+
+    return text_->OnKeyDown(evt);
 }
 
 bool TextTool::OnText(const dr4::Event::TextEvent &evt) {

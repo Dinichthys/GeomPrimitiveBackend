@@ -362,6 +362,8 @@ bool Text::OnKeyDown(const dr4::Event::KeyEvent &evt) {
             shift = ((str.length() > 2) && (str[str.length() - 2] == '\n')) ? 2 : 1;
             text_->SetText(str.substr(0, str.length() - shift));
             texture_->Clear({0, 0, 0, 0});
+            caret_->SetPos(text_->GetPos() + text_->GetBounds());
+            caret_pos_ -= shift;
             return true;
         default :
             return false;
@@ -381,9 +383,12 @@ bool Text::OnText(const dr4::Event::TextEvent &evt) {
     auto str = text_->GetText();
     text_->SetText(str + evt.unicode);
 
+    caret_pos_++;
     if (text_->GetBounds().x > rect_info_.size.x) {
         text_->SetText(str.substr(0, str.length() - strlen(evt.unicode)) + '\n' + evt.unicode);
+        caret_pos_++;
     }
+    caret_->SetPos(text_->GetPos() + text_->GetBounds());
     texture_->Clear({0, 0, 0, 0});
 
     return true;
