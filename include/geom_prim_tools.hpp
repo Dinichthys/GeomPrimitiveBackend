@@ -212,7 +212,6 @@ class TextTool : public pp::Tool {
             text_ = new Text(cvs_);
             text_->SetTheme(cvs_->GetControlsTheme());
             cvs_->AddShape(text_);
-            cvs_->SetSelectedShape(text_);
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
