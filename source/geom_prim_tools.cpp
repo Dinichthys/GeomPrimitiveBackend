@@ -156,8 +156,9 @@ bool TextTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != text_)) {
         OnStart();
+        is_drawing_ = true;
         text_->SetPos(evt.pos);
-        text_->OnSelect();
+        cvs_->SetSelectedShape(text_);
         return true;
     }
 

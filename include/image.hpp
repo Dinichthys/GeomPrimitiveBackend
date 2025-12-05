@@ -294,6 +294,7 @@ class ImageTool : public pp::Tool {
         };
         virtual void OnBreak() override {
             if (!is_drawing_) {
+                OnEnd();
                 return;
             }
             cvs_->DelShape(image_);
@@ -301,6 +302,7 @@ class ImageTool : public pp::Tool {
         };
         virtual void OnEnd() override {
             image_ = NULL;
+            file_name_shape_ = NULL;
             is_drawing_ = false;
             cvs_->SetSelectedShape(NULL);
             entered_ = false;

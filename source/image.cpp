@@ -8,14 +8,19 @@ extern "C" {
 namespace pp {
 
 bool ImageTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
+    if (!entered_) {
+        return false;
+    }
+
     if ((!is_drawing_ && (cvs_->GetSelectedShape() == NULL))
         || (cvs_->GetSelectedShape() != image_)) {
-        OnStart();
+        is_drawing_ = true;
+        image_->OnMouseDown(evt);
         return true;
     }
 
     is_drawing_ = true;
-    image_->SetPos(evt.pos);
+    image_->OnMouseDown(evt);
     return true;
 }
 
@@ -41,7 +46,7 @@ bool ImageTool::OnMouseMove(const dr4::Event::MouseMove &evt) {
 
 bool Image::OnMouseDown(const dr4::Event::MouseButton &evt) {
     if (selected_) {
-        image_->SetPos(evt.pos);
+        SetPos(evt.pos);
         is_drawing_ = true;
         return true;
     }
