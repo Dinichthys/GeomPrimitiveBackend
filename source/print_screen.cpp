@@ -16,7 +16,7 @@ bool PrintScreenTool::OnMouseDown(const dr4::Event::MouseButton &evt) {
 
     is_drawing_ = true;
     print_screen_->SetPos(evt.pos);
-    print_screen_->OnSelect();
+    cvs_->SetSelectedShape(print_screen_);
     print_screen_->OnMouseDown(evt);
     return true;
 }
@@ -128,15 +128,6 @@ void PrintScreen::SavePicture(const std::string& file_name) {
     free(data);
 
     delete image;
-}
-
-void PrintScreen::OnSelect() {
-    cvs_->SetSelectedShape(this);
-}
-void PrintScreen::OnDeselect() {
-    if (cvs_->GetSelectedShape() == this) {
-        cvs_->SetSelectedShape(NULL);
-    }
 }
 
 };

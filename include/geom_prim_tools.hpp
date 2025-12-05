@@ -16,7 +16,7 @@ class RectangleTool : public pp::Tool {
 
         Rectangle* rect_;
 
-        const std::string kIcon = "R";
+        const std::string kIcon = u8"󰗆";
         const std::string kName = "RectangleTool";
 
     public:
@@ -232,6 +232,7 @@ class TextTool : public pp::Tool {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
         virtual bool OnKeyDown(const dr4::Event::KeyEvent &) override;
         virtual bool OnText(const dr4::Event::TextEvent &) override;
+        virtual bool OnIdle(const IdleEvent &) override;
 };
 
 };

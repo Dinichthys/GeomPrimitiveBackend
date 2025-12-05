@@ -213,6 +213,15 @@ bool TextTool::OnText(const dr4::Event::TextEvent &evt) {
     return true;
 }
 
+bool TextTool::OnIdle(const IdleEvent &evt) {
+    if (!is_printing_) {
+        return false;
+    }
+
+    text_->OnIdle(evt);
+    return true;
+}
+
 //------------------------------------------------------------------------------------------------------------
 
 };

@@ -87,8 +87,14 @@ class PrintScreen : public pp::Shape {
             return rect_info_.pos;
         };
 
-        virtual void OnSelect() override;
-        virtual void OnDeselect() override;
+        void PrintScreen::OnSelect() {
+            cvs_->SetSelectedShape(this);
+        };
+        void PrintScreen::OnDeselect() {
+            if (cvs_->GetSelectedShape() == this) {
+                cvs_->SetSelectedShape(NULL);
+            }
+        };
 
         void SetTheme(const pp::ControlsTheme& theme) {
             border_->SetBorderColor(theme.handleColor);
