@@ -447,19 +447,26 @@ class Penis : public pp::Shape {
         };
 };
 
+static const float kCaretWidth = 3;
+
 class Text : public pp::Shape {
     private:
         pp::Canvas* cvs_;
 
         bool selected_;
         bool printing_;
+        bool blink_;
 
         const float kThickness = 5;
+
+        size_t caret_pos_;
 
         dr4::Texture* texture_;
         dr4::Text* text_;
 
         dr4::Rectangle* border_;
+
+        dr4::Rectangle* caret_;
 
         dr4::Rect2f rect_info_;
 
@@ -485,12 +492,19 @@ class Text : public pp::Shape {
             text_->SetPos({0, 0});
             text_->SetFontSize(kFontSize);
 
+            caret_ = cvs->GetWindow()->CreateRectangle();
+            caret_->SetFillColor(cvs->GetControlsTheme().handleActiveColor);
+            caret_->SetSize({kCaretWidth, kFontSize});
+            caret_->SetPos({});
+            caret_pos_ = 0;
+
             border_ = cvs->GetWindow()->CreateRectangle();
             border_->SetFillColor({0, 0, 0, 0});
             border_->SetBorderThickness(kThickness);
 
             selected_ = false;
             printing_ = false;
+            blink_ = false;
         };
 
         ~Text() {
@@ -509,6 +523,9 @@ class Text : public pp::Shape {
         virtual bool OnMouseMove(const dr4::Event::MouseMove &evt) override;
         virtual bool OnKeyDown(const dr4::Event::KeyEvent &) override;
         virtual bool OnText(const dr4::Event::TextEvent &) override;
+        virtual bool OnIdle(const IdleEvent &) override {
+            blink_ = !blink_;
+        };
 
         virtual void DrawOn(dr4::Texture& texture) const override {
             if (selected_) {
@@ -522,6 +539,9 @@ class Text : public pp::Shape {
 
             if (selected_ || printing_) {
                 border_->DrawOn(texture);
+                if (blink_) {
+                    caret_->DrawOn(texture);
+                }
             }
         };
 

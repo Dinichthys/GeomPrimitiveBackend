@@ -238,13 +238,9 @@ class Image : public pp::Shape {
         };
 
         virtual void OnSelect() override {
-            cvs_->SetSelectedShape(this);
             selected_ = true;
         };
         virtual void OnDeselect() override {
-            if (cvs_->GetSelectedShape() == this) {
-                cvs_->SetSelectedShape(NULL);
-            }
             selected_ = false;
         };
 
