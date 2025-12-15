@@ -111,8 +111,6 @@ void PrintScreen::SavePicture(const std::string& file_name) {
     unsigned char* data = (unsigned char*)calloc(size_t(rect_info_.size.x) * size_t(rect_info_.size.y) * kRGBASizeEncoding,
                                                  sizeof(unsigned char));
 
-    fprintf(stderr, "Screen size = %lu\n", size_t(rect_info_.size.x) * size_t(rect_info_.size.y) * kRGBASizeEncoding);
-
     size_t index = 0;
     for (size_t y = 0; y < size_t(rect_info_.size.y); y++) {
         for (size_t x = 0; x < size_t(rect_info_.size.x); x++) {
