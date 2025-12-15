@@ -110,7 +110,7 @@ class PrintScreenTool : public pp::Tool {
 
         std::string file_name_ = kEnterFileName;
 
-        const std::string kIcon = "PS";
+        const std::string kIcon = "󰹑";
         const std::string kName = "PrintScreenTool";
 
     public:

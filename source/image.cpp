@@ -144,20 +144,20 @@ void Image::SetPicture(const std::string& file_name) {
 
 void Image::ImageDataRedraw() const {
     if (!uploaded_) {
-        for (size_t x = 0; x < rect_info_.size.x; x++) {
-            for (size_t y = 0; y < rect_info_.size.y; y++) {
+        for (size_t x = 0; x < size_t(rect_info_.size.x); x++) {
+            for (size_t y = 0; y < size_t(rect_info_.size.y); y++) {
                 image_->SetPixel(x, y, kDefaultColor);
             }
         }
         return;
     }
 
-    for (size_t x = 0; x < rect_info_.size.x; x++) {
-        for (size_t y = 0; y < rect_info_.size.y; y++) {
-            size_t cur_x = x * data_size_.x / rect_info_.size.x;
-            size_t cur_y = y * data_size_.y / rect_info_.size.y;
+    for (size_t x = 0; x < size_t(rect_info_.size.x); x++) {
+        for (size_t y = 0; y < size_t(rect_info_.size.y); y++) {
+            size_t cur_x = x * size_t(data_size_.x) / size_t(rect_info_.size.x);
+            size_t cur_y = y * size_t(data_size_.y) / size_t(rect_info_.size.y);
 
-            size_t index = kRGBASizeEncoding * (cur_y * data_size_.x + cur_x);
+            size_t index = kRGBASizeEncoding * (cur_y * size_t(data_size_.x) + cur_x);
             image_->SetPixel(x, y, {
                 data_[index + 0],
                 data_[index + 1],

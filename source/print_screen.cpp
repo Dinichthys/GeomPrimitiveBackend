@@ -108,12 +108,14 @@ void PrintScreen::SavePicture(const std::string& file_name) {
         return;
     }
 
-    unsigned char* data = (unsigned char*)calloc(rect_info_.size.x * rect_info_.size.y * kRGBASizeEncoding,
+    unsigned char* data = (unsigned char*)calloc(size_t(rect_info_.size.x) * size_t(rect_info_.size.y) * kRGBASizeEncoding,
                                                  sizeof(unsigned char));
 
+    fprintf(stderr, "Screen size = %lu\n", size_t(rect_info_.size.x) * size_t(rect_info_.size.y) * kRGBASizeEncoding);
+
     size_t index = 0;
-    for (size_t y = 0; y < rect_info_.size.y; y++) {
-        for (size_t x = 0; x < rect_info_.size.x; x++) {
+    for (size_t y = 0; y < size_t(rect_info_.size.y); y++) {
+        for (size_t x = 0; x < size_t(rect_info_.size.x); x++) {
             dr4::Color color = image->GetPixel(x, y);
 
             data[index + 0] = color.r;

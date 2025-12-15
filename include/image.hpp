@@ -269,7 +269,7 @@ class ImageTool : public pp::Tool {
 
         std::string file_name_ = kEnterFileName;
 
-        const std::string kIcon = "I";
+        const std::string kIcon = "";
         const std::string kName = "ImageTool";
 
     public:
